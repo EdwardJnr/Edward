@@ -1,0 +1,197 @@
+// Katungo Engine data model.
+// SQLite for local development. For production, change provider to "postgresql"
+// and point DATABASE_URL at a Postgres database.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ADMIN and STAFF are Katungo team members and can see every workspace.
+// CLIENT users see only the workspaces they are members of.
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  name         String
+  passwordHash String
+  role         String       @default("CLIENT") // ADMIN | STAFF | CLIENT
+  createdAt    DateTime     @default(now())
+  sessions     Session[]
+  memberships  Membership[]
+}
+
+model Session {
+  id        String   @id // random token stored in the cookie
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// One workspace per client business.
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  publicKey String   @unique // used by the public lead form endpoint
+  createdAt DateTime @default(now())
+
+  // Stage 1 and 2 of the Story-to-Scale Method: who buys, and why they choose you.
+  industry String @default("")
+  website  String @default("")
+  audience String @default("") // the customers who make the business money
+  promise  String @default("") // the reason to choose
+  proof    String @default("") // testimonials, results, credentials
+  offers   String @default("") // products, services, prices
+  voice    String @default("") // tone and words to use or avoid
+
+  plan         String    @default("NONE") // NONE | STARTER | GROWTH | SCALE
+  planStatus   String    @default("INACTIVE") // INACTIVE | ACTIVE | PAST_DUE
+  planRenewsAt DateTime?
+
+  memberships Membership[]
+  leads       Lead[]
+  content     ContentItem[]
+  mailbox     Mailbox?
+  emails      EmailMessage[]
+  chatbots    Chatbot[]
+  reports     Report[]
+  payments    Payment[]
+}
+
+model Membership {
+  userId      String
+  workspaceId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@id([userId, workspaceId])
+}
+
+model Lead {
+  id          String    @id @default(cuid())
+  workspaceId String
+  name        String
+  email       String    @default("")
+  phone       String    @default("")
+  source      String    @default("manual") // web | chat | email | whatsapp | manual
+  stage       String    @default("NEW") // NEW | CONTACTED | QUOTED | WON | LOST
+  value       Float     @default(0) // sale value in USD once won
+  notes       String    @default("")
+  createdAt   DateTime  @default(now())
+  wonAt       DateTime?
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+}
+
+model ContentItem {
+  id          String    @id @default(cuid())
+  workspaceId String
+  channel     String // instagram | facebook | linkedin | tiktok | whatsapp | email | ad
+  format      String // post | caption | ad | script | newsletter
+  brief       String
+  title       String    @default("")
+  body        String
+  status      String    @default("DRAFT") // DRAFT | APPROVED | PUBLISHED
+  createdAt   DateTime  @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+}
+
+model Mailbox {
+  id          String    @id @default(cuid())
+  workspaceId String    @unique
+  imapHost    String
+  imapPort    Int       @default(993)
+  smtpHost    String
+  smtpPort    Int       @default(465)
+  username    String
+  passwordEnc String // AES-256-GCM, see src/lib/crypto.ts
+  fromName    String    @default("")
+  lastUid     Int       @default(0)
+  lastSyncAt  DateTime?
+  lastError   String    @default("")
+  // Off by default: every reply waits for a person to approve it.
+  autoSend    Boolean   @default(false)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model EmailMessage {
+  id          String    @id @default(cuid())
+  workspaceId String
+  messageId   String // RFC 822 Message-ID header
+  fromAddr    String
+  fromName    String    @default("")
+  subject     String    @default("")
+  bodyText    String    @default("")
+  receivedAt  DateTime
+  category    String    @default("") // enquiry | client | supplier | spam | other
+  summary     String    @default("")
+  draftReply  String    @default("")
+  status      String    @default("NEW") // NEW | DRAFTED | SENT | IGNORED
+  sentAt      DateTime?
+  leadId      String?
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, messageId])
+  @@index([workspaceId, receivedAt])
+}
+
+model Chatbot {
+  id            String             @id @default(cuid())
+  workspaceId   String
+  name          String
+  welcome       String             @default("Hello. How can I help you today?")
+  instructions  String             @default("") // extra rules for this bot
+  knowledge     String             @default("") // FAQs, prices, opening hours
+  active        Boolean            @default(true)
+  createdAt     DateTime           @default(now())
+  workspace     Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  conversations ChatConversation[]
+}
+
+model ChatConversation {
+  id        String   @id @default(cuid())
+  chatbotId String
+  visitorId String
+  messages  String   @default("[]") // JSON array of { role, text }
+  leadId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  chatbot   Chatbot  @relation(fields: [chatbotId], references: [id], onDelete: Cascade)
+
+  @@index([chatbotId, visitorId])
+}
+
+// Stage 5: the monthly Run report.
+model Report {
+  id          String    @id @default(cuid())
+  workspaceId String
+  month       String // YYYY-MM
+  metrics     String // JSON, see src/lib/metrics.ts
+  narrative   String
+  createdAt   DateTime  @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, month])
+}
+
+model Payment {
+  id          String    @id @default(cuid())
+  workspaceId String
+  reference   String    @unique
+  plan        String
+  amount      Float
+  method      String // web | ecocash | onemoney
+  status      String    @default("CREATED") // CREATED | SENT | PAID | CANCELLED | FAILED
+  pollUrl     String    @default("")
+  paynowRef   String    @default("")
+  createdAt   DateTime  @default(now())
+  paidAt      DateTime?
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
