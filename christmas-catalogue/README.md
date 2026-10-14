@@ -1,6 +1,16 @@
 # Christmas Promo Selection — InDesign catalogue
 
-`Christmas_Promo_Catalogue.idml` is built from `source.csv` (Christmas_Promo_Selection Additional Version 1) by `build_idml.py`.
+**Open the layout in InDesign**
+1. In InDesign, open Window → Utilities → Scripts.
+2. Right-click the **User** folder and choose Reveal in Finder (Mac) or Reveal in Explorer (Windows).
+3. Copy `Build_Christmas_Catalogue.jsx` into that folder.
+4. Double-click it in the Scripts panel.
+
+It builds all 19 pages and saves `Christmas_Promo_Catalogue.indd` to your Desktop. `Christmas_Promo_Catalogue_proof.pdf` shows exactly what it builds.
+
+The earlier `Christmas_Promo_Catalogue.idml` opened with blank pages. Don't use it.
+
+The layout is built from `source.csv` (Christmas_Promo_Selection Additional Version 1) by `build_catalogue.py`.
 
 **Layout**
 - A4 portrait, 19 pages, 8 mm margins, 5-column product grid.
@@ -23,6 +33,6 @@
 - Name each photo with its Item No (`900671.jpg`; replace `/` with `-`, so `DL147-2 WHITE.jpg`).
 - Run `place_product_images.jsx` (Window → Utilities → Scripts → User folder → Reveal in Finder/Explorer, copy the file in, then double-click it). It reports any items still without a photo.
 
-**Regenerate after editing the sheet:** save it as `source.csv` here and run `python3 build_idml.py`.
+**Regenerate after editing the sheet:** save it as `source.csv` here and run `python3 build_catalogue.py`.
 
 Internal columns (landed cost, stock on hand, sales, rate of sale, notes) are deliberately left out of the layout.
