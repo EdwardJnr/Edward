@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1400">
+<title>Exquisite Cars Case Study</title>
+<style>
+@font-face{font-family:Montserrat;src:url(assets/fonts/montserrat-var.woff2) format('woff2');font-weight:100 900}
+:root{
+  --ink:#07090C;--carbon:#10141C;--graphite:#232832;--steel:#3A414C;
+  --navy:#1F3B60;--navy-d:#152A47;--green:#3EAB52;
+  --plat:#E9EDF2;--silver:#A9B0BA;--mute:#8A93A0;--white:#FFFFFF;
+  --m:100px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:Inter,Helvetica,Arial,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.panel{width:1400px;position:relative;overflow:hidden;background:var(--carbon)}
+.panel+.panel{margin-top:0}
+.d{font-family:Montserrat,sans-serif;font-weight:800;text-transform:uppercase;line-height:.96;letter-spacing:.01em}
+.d.l{font-weight:300}
+.eyebrow{font-family:Montserrat,sans-serif;font-weight:600;font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:var(--green)}
+.body{font-size:19px;line-height:1.65;color:#BCC3CD;font-weight:400}
+.small{font-size:14px;line-height:1.6;color:#8A93A0}
+.note{font-family:Montserrat,sans-serif;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#5E6774}
+.rule{width:64px;height:3px;background:var(--green)}
+.light{background:var(--plat);color:var(--carbon)}
+.light .body{color:#3D4550}
+.light .note{color:#8A93A0}
+.white{background:#fff;color:var(--carbon)}
+.white .body{color:#3D4550}
+.head{position:absolute;left:var(--m);right:var(--m);top:56px;display:flex;justify-content:space-between;align-items:center;z-index:20}
+.head .note b{color:var(--green);font-weight:700;margin-right:14px}
+.abs{position:absolute}
+.stage{position:absolute;inset:0;
+  background:
+   radial-gradient(ellipse 46% 60% at 50% -6%,rgba(176,196,226,.26),rgba(176,196,226,0) 70%),
+   radial-gradient(ellipse 60% 14% at 50% var(--fl,64%),rgba(255,255,255,.07),rgba(255,255,255,0) 70%),
+   linear-gradient(180deg,#0A0E14 0%,#121722 calc(var(--fl,64%) - .1%),#191E27 var(--fl,64%),#0B0E13 100%)}
+.stage.navy{background:
+   radial-gradient(ellipse 46% 60% at 50% -6%,rgba(120,160,215,.30),rgba(120,160,215,0) 70%),
+   radial-gradient(ellipse 60% 14% at 50% var(--fl,64%),rgba(255,255,255,.08),rgba(255,255,255,0) 70%),
+   linear-gradient(180deg,#0C1A2E 0%,#132744 calc(var(--fl,64%) - .1%),#1A2C46 var(--fl,64%),#09121F 100%)}
+.car{position:absolute;display:block}
+.plate{position:relative;overflow:hidden;background:#0B0E13}
+.plate.abs{position:absolute}
+.plate>img.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:5}
+.cap{position:absolute;left:20px;bottom:16px;z-index:6;font-family:Montserrat;font-weight:600;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.logo{display:block}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:14px 22px;border-radius:2px}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.4)}
+.wa{width:16px;height:16px;border-radius:50%;border:2px solid #fff;position:relative}
+.wa:after{content:"";position:absolute;left:-3px;bottom:-3px;width:6px;height:6px;background:inherit;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:skewX(-20deg)}
+.shadow{box-shadow:0 40px 80px rgba(0,0,0,.55),0 10px 24px rgba(0,0,0,.35)}
+.light .shadow{box-shadow:0 30px 60px rgba(16,20,28,.16),0 6px 16px rgba(16,20,28,.10)}
+.phone{position:absolute;width:300px;height:640px;border-radius:46px;background:#050608;padding:10px;box-shadow:0 50px 90px rgba(0,0,0,.6),inset 0 0 0 2px #2a2f38}
+.phone .scr{position:relative;width:100%;height:100%;border-radius:37px;overflow:hidden;background:var(--carbon)}
+.phone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:90px;height:26px;border-radius:14px;background:#000;z-index:30}
+.chip{display:inline-block;font-family:Montserrat;font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:6px 10px;border:1px solid rgba(255,255,255,.25);color:#cfd5dd}
+.tag{position:absolute;font-family:Montserrat;font-weight:700;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#fff;background:rgba(62,171,82,.92);padding:6px 10px;z-index:10}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.08)}
+.spec div{background:var(--carbon);padding:12px 14px}
+.spec small{display:block;font-family:Montserrat;font-weight:600;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#7D8693;margin-bottom:4px}
+.spec span{font-size:14px;color:#fff;font-weight:500}
+.bar{height:10px;border-radius:2px;background:#D5DAE1}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     01 — COVER
+============================================================ -->
+<section class="panel" id="p01" data-name="01-cover" style="height:1000px">
+  <div class="stage" style="--fl:76%"></div>
+  <div class="plate abs" style="inset:0;background:transparent">
+    <img class="ph" src="photos/01-hero.jpg" onerror="this.remove()" alt="">
+    <div class="car" data-car="sedan" style="width:860px;left:520px;top:590px"></div>
+  </div>
+  <div class="abs" style="inset:0;background:linear-gradient(90deg,rgba(7,9,12,.92) 0%,rgba(7,9,12,.55) 34%,rgba(7,9,12,0) 60%);z-index:6"></div>
+  <img class="logo abs" src="assets/logo-reversed.png" style="left:var(--m);top:84px;width:300px;z-index:10" alt="Exquisite Cars">
+  <div class="abs" style="left:var(--m);top:250px;z-index:10">
+    <div class="eyebrow" style="margin-bottom:28px">Brand identity concept · Harare, Zimbabwe</div>
+    <div class="d" style="font-size:88px">Drive your<br>distinction.</div>
+    <div class="rule" style="margin:40px 0 26px"></div>
+    <div style="font-family:Montserrat;font-weight:500;font-size:15px;letter-spacing:.26em;text-transform:uppercase;color:#C9CFD8">Brand Identity · Automotive Campaign · Digital Experience</div>
+  </div>
+  <div class="abs note" style="left:var(--m);bottom:56px;z-index:10">Self-initiated concept project · 2026</div>
+  <div class="abs note" style="right:var(--m);bottom:56px;z-index:10">01 / 16</div>
+</section>
+
+<!-- ============================================================
+     02 — OPENING STATEMENT
+============================================================ -->
+<section class="panel" id="p02" data-name="02-opening-statement" style="height:900px;background:var(--ink)">
+  <div class="head"><div class="note"><b>02</b>Opening statement</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:250px;width:620px">
+    <div class="d" style="font-size:78px">More than<br>a drive.</div>
+    <div class="d l" style="font-size:78px;color:#8D97A5;margin-top:10px">A statement<br>of who<br>you are.</div>
+    <div class="rule" style="margin:44px 0 26px"></div>
+    <div class="body" style="max-width:440px">A concept for a distinctive automotive experience, built around the existing Exquisite Cars identity.</div>
+  </div>
+  <div class="plate abs" style="left:760px;top:0;width:640px;height:900px">
+    <img class="ph" src="photos/02-detail.jpg" onerror="this.remove()" alt="">
+    <div class="stage" style="--fl:82%"></div>
+    <div class="car" data-car="sedan" style="width:1700px;left:-1000px;top:290px"></div>
+    <div class="abs" style="inset:0;background:linear-gradient(90deg,var(--ink) 0%,rgba(7,9,12,0) 30%)"></div>
+    <div class="cap">Detail · front quarter</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     03 — BRIEF AND OPPORTUNITY
+============================================================ -->
+<section class="panel light" id="p03" data-name="03-brief-opportunity" style="height:1150px">
+  <div class="head"><div class="note"><b>03</b>The brief</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px;width:520px">
+    <div class="eyebrow" style="margin-bottom:26px">The opportunity</div>
+    <div style="font-family:Montserrat;font-weight:600;font-size:34px;line-height:1.3;color:var(--carbon)">“Build a cohesive visual language that brings together automotive aspiration, brand recognition and practical customer communication.”</div>
+    <div style="margin-top:56px;display:grid;gap:30px">
+      <div style="display:flex;gap:22px"><div class="d" style="font-size:22px;color:var(--green);width:36px">01</div><div><div class="d" style="font-size:17px;margin-bottom:8px">Recognition</div><div class="body" style="font-size:16px">Keep the green X and navy wordmark as the anchor. Build around them rather than replace them.</div></div></div>
+      <div style="display:flex;gap:22px"><div class="d" style="font-size:22px;color:var(--green);width:36px">02</div><div><div class="d" style="font-size:17px;margin-bottom:8px">Aspiration</div><div class="body" style="font-size:16px">Move the vehicles out of the car-park snapshot and into a considered, cinematic setting.</div></div></div>
+      <div style="display:flex;gap:22px"><div class="d" style="font-size:22px;color:var(--green);width:36px">03</div><div><div class="d" style="font-size:17px;margin-bottom:8px">Conversion</div><div class="body" style="font-size:16px">Make every listing easy to read on a phone and one tap from a WhatsApp enquiry.</div></div></div>
+    </div>
+    <div class="note" style="margin-top:60px;line-height:1.8">Self-initiated concept project.<br>Not commissioned by Exquisite Cars.</div>
+  </div>
+  <div class="abs" style="left:700px;top:170px;width:600px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="plate" style="height:400px;grid-column:span 2">
+      <img class="ph" src="photos/03-architecture.jpg" onerror="this.remove()" alt="">
+      <div class="abs" style="inset:0;background:linear-gradient(180deg,#0C1018,#1A202B)"></div>
+      <svg class="abs" style="inset:0" viewBox="0 0 600 400" preserveAspectRatio="none">
+        <g stroke="rgba(255,255,255,.10)" stroke-width="1">
+          <line x1="300" y1="170" x2="0" y2="0"/><line x1="300" y1="170" x2="600" y2="0"/><line x1="300" y1="170" x2="0" y2="400"/><line x1="300" y1="170" x2="600" y2="400"/>
+          <line x1="300" y1="170" x2="150" y2="0"/><line x1="300" y1="170" x2="450" y2="0"/><line x1="300" y1="170" x2="120" y2="400"/><line x1="300" y1="170" x2="480" y2="400"/>
+        </g>
+        <rect x="236" y="120" width="128" height="80" fill="rgba(200,215,240,.20)"/>
+        <rect x="0" y="0" width="70" height="400" fill="rgba(0,0,0,.35)"/><rect x="530" y="0" width="70" height="400" fill="rgba(0,0,0,.35)"/>
+      </svg>
+      <div class="car" data-car="suv" style="width:300px;left:150px;top:126px"></div>
+      <div class="cap">02 / Architecture and presence</div>
+    </div>
+    <div class="plate" style="height:290px">
+      <img class="ph" src="photos/03-detail.jpg" onerror="this.remove()" alt="">
+      <div class="abs" style="inset:0;background:radial-gradient(circle at 70% 40%,#1E2633,#080A0E 70%)"></div>
+      <div class="car" data-car="sedan" style="width:900px;left:-560px;top:-30px"></div>
+      <div class="cap">01 / Detail and craft</div>
+    </div>
+    <div class="plate" style="height:290px">
+      <img class="ph" src="photos/03-interior.jpg" onerror="this.remove()" alt="">
+      <div class="abs" style="inset:0;background:repeating-linear-gradient(45deg,rgba(0,0,0,0) 0 30px,rgba(0,0,0,.55) 30px 32px),repeating-linear-gradient(-45deg,rgba(0,0,0,0) 0 30px,rgba(0,0,0,.55) 30px 32px),linear-gradient(160deg,#5a3a26,#24170f)"></div>
+      <div class="abs" style="inset:0;background:radial-gradient(ellipse 70% 60% at 35% 25%,rgba(255,226,190,.32),rgba(0,0,0,.65) 75%)"></div>
+      <svg class="abs" style="inset:0" viewBox="0 0 292 290" preserveAspectRatio="none"><path d="M0 230 Q146 200 292 236" fill="none" stroke="rgba(230,200,160,.55)" stroke-width="1.5" stroke-dasharray="5 4"/><path d="M0 244 Q146 214 292 250" fill="none" stroke="rgba(0,0,0,.6)" stroke-width="6"/></svg>
+      <div class="cap">03 / Interior and comfort</div>
+    </div>
+    <div class="plate" style="height:250px;grid-column:span 2">
+      <img class="ph" src="photos/03-harare.jpg" onerror="this.remove()" alt="">
+      <div class="abs" style="inset:0;background:linear-gradient(180deg,#0E1B2E 0%,#2A3B55 55%,#B9875A 100%)"></div>
+      <svg class="abs" style="left:0;bottom:0;width:100%;height:150px" viewBox="0 0 600 150" preserveAspectRatio="none" fill="#07090C">
+        <path d="M0 150 V110 H30 V96 H52 V120 H70 V70 H96 V112 H120 V84 H140 V40 H158 V20 H170 V40 H186 V104 H210 V78 H240 V60 H262 V100 H290 V30 H316 V100 H340 V86 H370 V54 H392 V96 H420 V74 H446 V106 H470 V90 H500 V64 H520 V110 H560 V96 H600 V150Z"/>
+      </svg>
+      <div class="cap">04 / Local relevance · city at dusk</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     04 — LOGO AND BRAND DNA
+============================================================ -->
+<section class="panel white" id="p04" data-name="04-logo-brand-dna" style="height:1500px">
+  <div class="head"><div class="note"><b>04</b>Logo and brand DNA</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px;width:1200px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div class="d" style="font-size:60px;color:var(--carbon)">A distinctive mark.<br><span style="color:var(--navy)">A consistent experience.</span></div>
+    <div class="body" style="width:420px;font-size:16px">The green X is the brand's signature: a crossing point, a mark of selection. The navy lettering carries authority and trust. Both are preserved exactly as supplied.</div>
+  </div>
+  <!-- primary with clear space -->
+  <div class="abs" style="left:var(--m);top:400px;width:1200px;height:520px;background:#F6F7F9;display:flex;align-items:center;justify-content:center">
+    <div style="position:relative;padding:62px 70px;border:1px dashed rgba(31,59,96,.35)">
+      <img class="logo" src="assets/logo-primary.png" style="width:640px" alt="">
+      <div class="abs" style="left:0;top:0;width:62px;height:62px;background:rgba(62,171,82,.12);display:flex;align-items:center;justify-content:center;font-family:Montserrat;font-weight:700;color:var(--green);font-size:14px">x</div>
+      <div class="abs" style="right:0;bottom:0;width:62px;height:62px;background:rgba(62,171,82,.12);display:flex;align-items:center;justify-content:center;font-family:Montserrat;font-weight:700;color:var(--green);font-size:14px">x</div>
+    </div>
+    <div class="abs note" style="left:28px;top:24px">Primary logo · clear space = x (height of the cap “E” ÷ 2)</div>
+    <div class="abs note" style="right:28px;bottom:24px">Minimum size · 35 mm print / 140 px screen</div>
+  </div>
+  <!-- variants -->
+  <div class="abs" style="left:var(--m);top:950px;width:1200px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+    <div><div style="height:260px;background:var(--carbon);display:flex;align-items:center;justify-content:center"><img src="assets/logo-reversed.png" style="width:300px" alt=""></div><div class="note" style="margin-top:14px">Reversed · Carbon Black</div></div>
+    <div><div style="height:260px;background:var(--navy);display:flex;align-items:center;justify-content:center"><img src="assets/logo-reversed.png" style="width:300px" alt=""></div><div class="note" style="margin-top:14px">Reversed · Midnight Navy</div></div>
+    <div><div style="height:260px;background:var(--green);display:flex;align-items:center;justify-content:center"><img src="assets/logo-mono-white.png" style="width:300px" alt=""></div><div class="note" style="margin-top:14px">Mono white · Signature Green</div></div>
+  </div>
+  <div class="abs" style="left:var(--m);top:1290px;width:1200px;display:grid;grid-template-columns:200px 1fr 1fr 1fr;gap:20px;align-items:center">
+    <div style="height:150px;background:var(--carbon);display:flex;align-items:center;justify-content:center"><img src="assets/mark-x.svg" style="width:70px" alt=""></div>
+    <div><div class="d" style="font-size:15px;margin-bottom:8px">The X monogram</div><div class="body" style="font-size:15px">Derived from the existing mark for avatars, signage pylons, key cards and watermarks.</div></div>
+    <div><div class="d" style="font-size:15px;margin-bottom:8px">Never redrawn</div><div class="body" style="font-size:15px">No stretching, recolouring, outlines or effects. The supplied artwork is the source of truth.</div></div>
+    <div><div class="d" style="font-size:15px;margin-bottom:8px">Light or dark</div><div class="body" style="font-size:15px">Primary on white and platinum. Reversed on carbon, navy and photography.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     05 — VISUAL SYSTEM
+============================================================ -->
+<section class="panel" id="p05" data-name="05-visual-system" style="height:1400px">
+  <div class="head"><div class="note"><b>05</b>Visual system</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px">
+    <div class="d" style="font-size:72px">Precision in<br>every detail.</div>
+  </div>
+  <div class="abs" style="left:var(--m);top:390px;width:1200px;display:grid;grid-template-columns:2fr 2fr 1fr 1fr 1fr 1fr;gap:12px;height:320px">
+    <div style="background:#10141C;border:1px solid #2a303a;padding:22px;display:flex;flex-direction:column;justify-content:flex-end"><div class="d" style="font-size:16px">Carbon Black</div><div class="small">#10141C · Cinematic ground</div></div>
+    <div style="background:#1F3B60;padding:22px;display:flex;flex-direction:column;justify-content:flex-end"><div class="d" style="font-size:16px">Midnight Navy</div><div class="small" style="color:#AFC0D6">#1F3B60 · Sampled from logo</div></div>
+    <div style="background:#3EAB52;padding:18px;display:flex;flex-direction:column;justify-content:flex-end"><div class="d" style="font-size:13px">Green</div><div class="small" style="color:#E3F5E7;font-size:12px">#3EAB52<br>Sampled</div></div>
+    <div style="background:#E9EDF2;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;color:#10141C"><div class="d" style="font-size:13px">Platinum</div><div class="small" style="font-size:12px;color:#5E6774">#E9EDF2</div></div>
+    <div style="background:#A9B0BA;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;color:#10141C"><div class="d" style="font-size:13px">Silver</div><div class="small" style="font-size:12px;color:#3D4550">#A9B0BA</div></div>
+    <div style="background:#232832;padding:18px;display:flex;flex-direction:column;justify-content:flex-end"><div class="d" style="font-size:13px">Graphite</div><div class="small" style="font-size:12px">#232832</div></div>
+  </div>
+  <div class="abs" style="left:var(--m);top:730px;width:1200px">
+    <div style="display:flex;height:8px"><div style="flex:60;background:#0A0D12;border:1px solid #2a303a"></div><div style="flex:22;background:#1F3B60"></div><div style="flex:10;background:#E9EDF2"></div><div style="flex:8;background:#3EAB52"></div></div>
+    <div style="display:flex;margin-top:10px" class="note"><div style="flex:60">60% Carbon</div><div style="flex:22">22% Navy</div><div style="flex:10">10% Platinum</div><div style="flex:8;color:var(--green)">8% Green</div></div>
+  </div>
+  <!-- type -->
+  <div class="abs" style="left:var(--m);top:840px;width:1200px;display:grid;grid-template-columns:1fr 1fr;gap:80px;border-top:1px solid #262c36;padding-top:60px">
+    <div>
+      <div class="eyebrow" style="margin-bottom:18px">Display · Montserrat ExtraBold</div>
+      <div class="d" style="font-size:150px;line-height:.9;text-transform:none">Aa</div>
+      <div class="d" style="font-size:22px;letter-spacing:.06em;margin-top:22px;color:#C9CFD8">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</div>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:18px">Text · Inter Regular / Medium</div>
+      <div style="font-size:150px;line-height:.9;font-weight:500;letter-spacing:-.02em">Aa</div>
+      <div class="body" style="margin-top:22px;font-size:17px">Clear specifications, prices and enquiry details. Highly legible on a phone, on a windscreen board and on a quotation.</div>
+    </div>
+  </div>
+  <div class="abs" style="left:var(--m);top:1230px;width:1200px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+    <div><div class="note">H1 · 96/92 · +1%</div><div class="d" style="font-size:30px;margin-top:8px">Headline</div></div>
+    <div><div class="note">Eyebrow · 13 · +34%</div><div class="eyebrow" style="margin-top:14px">Vehicle category</div></div>
+    <div><div class="note">Spec · Inter 15</div><div style="font-size:15px;margin-top:12px;color:#C9CFD8">Automatic · 2.0 Turbo</div></div>
+    <div><div class="note">Action</div><div style="margin-top:8px"><span class="btn" style="padding:10px 16px;font-size:11px"><i class="wa"></i>Enquire</span></div></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     06 — ART DIRECTION
+============================================================ -->
+<section class="panel" id="p06" data-name="06-art-direction" style="height:1450px;background:var(--ink)">
+  <div class="head"><div class="note"><b>06</b>Automotive art direction</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px;width:1200px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div class="d" style="font-size:72px">Every angle<br>has a purpose.</div>
+    <div class="body" style="width:440px;font-size:17px">Sculpted light. Considered composition. A focus on the details that make every vehicle worth discovering.</div>
+  </div>
+  <div class="plate abs" style="left:var(--m);top:400px;width:1200px;height:560px">
+    <img class="ph" src="photos/06-hero.jpg" onerror="this.remove()" alt="">
+    <div class="stage" style="--fl:78%"></div>
+    <div class="car" data-car="sedan" style="width:900px;left:150px;top:182px"></div>
+    <div class="cap">Hero · profile, top-lit, controlled reflection</div>
+  </div>
+  <div class="abs" style="left:var(--m);top:980px;width:1200px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+    <div class="plate" style="height:250px"><img class="ph" src="photos/06-front.jpg" onerror="this.remove()" alt=""><div class="stage" style="--fl:90%"></div><div class="car" data-car="sedan" style="width:1100px;left:-720px;top:-60px"></div><div class="cap">Front · light line</div></div>
+    <div class="plate" style="height:250px"><img class="ph" src="photos/06-wheel.jpg" onerror="this.remove()" alt=""><div class="stage" style="--fl:95%"></div><div class="car" data-car="sedan" style="width:1200px;left:-630px;top:-120px"></div><div class="cap">Detail · wheel and arch</div></div>
+    <div class="plate" style="height:250px"><img class="ph" src="photos/06-rear.jpg" onerror="this.remove()" alt=""><div class="stage" style="--fl:95%"></div><div class="car" data-car="sedan" style="width:1100px;left:-10px;top:-80px"></div><div class="cap">Rear · tail signature</div></div>
+  </div>
+  <div class="abs" style="left:var(--m);top:1280px;width:1200px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px">
+    <div><div class="d" style="font-size:14px;color:var(--green);margin-bottom:8px">Light to reveal</div><div class="small">Top and edge light define the shape. Never bury the car in black.</div></div>
+    <div><div class="d" style="font-size:14px;color:var(--green);margin-bottom:8px">Three angles</div><div class="small">Three-quarter front for heroes, profile for proportion, close-ups for craft.</div></div>
+    <div><div class="d" style="font-size:14px;color:var(--green);margin-bottom:8px">Grade</div><div class="small">Cool shadows, neutral highlights, lifted blacks. No green cast.</div></div>
+    <div><div class="d" style="font-size:14px;color:var(--green);margin-bottom:8px">Real stock</div><div class="small">Shoot actual inventory in real Harare locations wherever possible.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     07 — CAMPAIGN MASTER
+============================================================ -->
+<section class="panel" id="p07" data-name="07-campaign-master" style="height:1300px;background:#1A1F27">
+  <div class="head"><div class="note"><b>07</b>Campaign concept</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px;width:330px">
+    <div class="eyebrow" style="margin-bottom:22px">Campaign master</div>
+    <div class="d" style="font-size:44px">Drive your distinction.</div>
+    <div class="rule" style="margin:30px 0 24px"></div>
+    <div class="body" style="font-size:16px">A vehicle says something about the person driving it: achievement, taste, family, freedom. The campaign connects each car to that motive instead of presenting a cut-out with a price underneath.</div>
+    <div class="body" style="font-size:16px;margin-top:20px">Every later execution inherits this poster's type, grade, grid and accent.</div>
+    <div class="note" style="margin-top:40px;line-height:1.8">Proposed campaign platform.<br>Sits alongside the official tagline,<br>“Excellence Through Passion”.</div>
+  </div>
+  <!-- poster 4:5 -->
+  <div class="abs shadow poster" style="left:520px;top:170px;width:780px;height:975px;overflow:hidden;background:var(--ink)">
+    <img class="ph" src="photos/07-poster.jpg" onerror="this.remove()" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1">
+    <div class="stage" style="--fl:78%"></div>
+    <div class="car" data-car="sedan" style="width:740px;left:20px;top:534px"></div>
+    <div class="abs" style="left:64px;top:64px;z-index:5"><img src="assets/logo-reversed.png" style="width:220px" alt=""></div>
+    <div class="abs" style="left:64px;top:170px;z-index:5">
+      <div class="d" style="font-size:84px">Drive your<br>distinction.</div>
+      <div style="font-size:22px;color:#C9CFD8;margin-top:22px">Find the vehicle that moves you forward.</div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;bottom:60px;z-index:5;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.18);padding-top:26px">
+      <div class="note" style="color:#C9CFD8">Harare · Zimbabwe</div>
+      <span class="btn"><i class="wa"></i>Enquire on WhatsApp</span>
+    </div>
+  </div>
+  <div class="abs note" style="left:520px;top:1175px">Master poster · 1080 × 1350 px</div>
+</section>
+
+<!-- ============================================================
+     08 — CAMPAIGN EXTENSIONS
+============================================================ -->
+<section class="panel" id="p08" data-name="08-campaign-extensions" style="height:1200px;background:var(--ink)">
+  <div class="head"><div class="note"><b>08</b>Campaign extensions</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px"><div class="d" style="font-size:60px">Three motives.<br><span style="color:#8D97A5;font-weight:300">One campaign.</span></div></div>
+  <div class="abs" style="left:var(--m);top:400px;width:1200px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+    <!-- 1 -->
+    <div>
+      <div class="shadow" style="position:relative;height:480px;overflow:hidden;background:var(--ink)">
+        <img class="ph" src="photos/08-executive.jpg" onerror="this.remove()" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1">
+        <div class="stage" style="--fl:72%"></div>
+        <div class="car" data-car="sedan" style="width:380px;left:4px;top:233px"></div>
+        <img src="assets/logo-reversed.png" class="abs" style="left:28px;top:28px;width:110px;z-index:5" alt="">
+        <div class="abs" style="left:28px;top:84px;z-index:5"><div class="eyebrow" style="font-size:9px;margin-bottom:10px">Executive Choice</div><div class="d" style="font-size:34px">Presence<br>that speaks<br>for itself.</div></div>
+        <div class="abs note" style="left:28px;bottom:24px;color:#C9CFD8;z-index:5">Executive sedans</div>
+      </div>
+      <div class="d" style="font-size:15px;margin-top:22px">Executive Choice</div><div class="small" style="margin-top:6px">Confidence and professional presence.</div>
+    </div>
+    <!-- 2 -->
+    <div>
+      <div class="shadow" style="position:relative;height:480px;overflow:hidden;background:var(--navy-d)">
+        <img class="ph" src="photos/08-everyday.jpg" onerror="this.remove()" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1">
+        <div class="stage navy" style="--fl:72%"></div>
+        <div class="car" data-car="hatch" style="width:360px;left:14px;top:238px"></div>
+        <img src="assets/logo-reversed.png" class="abs" style="left:28px;top:28px;width:110px;z-index:5" alt="">
+        <div class="abs" style="left:28px;top:84px;z-index:5"><div class="eyebrow" style="font-size:9px;margin-bottom:10px">Ready for Everyday</div><div class="d" style="font-size:34px">Your next<br>journey<br>starts here.</div></div>
+        <div class="abs note" style="left:28px;bottom:24px;color:#C9CFD8;z-index:5">Compact &amp; everyday</div>
+      </div>
+      <div class="d" style="font-size:15px;margin-top:22px">Ready for Everyday</div><div class="small" style="margin-top:6px">Practical mobility and everyday value.</div>
+    </div>
+    <!-- 3 -->
+    <div>
+      <div class="shadow" style="position:relative;height:480px;overflow:hidden;background:var(--ink)">
+        <img class="ph" src="photos/08-select.jpg" onerror="this.remove()" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1">
+        <div class="stage" style="--fl:72%"></div>
+        <div class="car" data-car="suv" data-accent="green" style="width:380px;left:4px;top:226px"></div>
+        <img src="assets/logo-reversed.png" class="abs" style="left:28px;top:28px;width:110px;z-index:5" alt="">
+        <div class="abs" style="left:28px;top:84px;z-index:5"><div class="eyebrow" style="font-size:9px;margin-bottom:10px">Exquisite Select</div><div class="d" style="font-size:34px">Discover<br>your next<br>favourite.</div></div>
+        <div class="abs note" style="left:28px;bottom:24px;color:#C9CFD8;z-index:5">Curated premium stock</div>
+      </div>
+      <div class="d" style="font-size:15px;margin-top:22px">Exquisite Select</div><div class="small" style="margin-top:6px">Craftsmanship, space and distinction.</div>
+    </div>
+  </div>
+  <div class="abs note" style="left:var(--m);bottom:70px">Match each direction to verified stock before publishing</div>
+</section>
+
+<!-- ============================================================
+     09 — VEHICLE STOCK ADVERTISING
+============================================================ -->
+<section class="panel" id="p09" data-name="09-stock-advertising" style="height:1300px;background:#1A1F27">
+  <div class="head"><div class="note"><b>09</b>Vehicle stock advertising</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px;width:1200px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div class="d" style="font-size:60px">Your next drive<br>starts here.</div>
+    <div class="body" style="width:440px;font-size:16px">Legibility before decoration. Model, year, key specifications and the enquiry route are readable in a two-second scroll.</div>
+  </div>
+  <!-- feed post 4:5 -->
+  <div class="abs shadow" style="left:var(--m);top:400px;width:440px;height:550px;background:var(--ink);overflow:hidden">
+    <div class="stage" style="--fl:58%"></div>
+    <div class="car" data-car="sedan" style="width:420px;left:10px;top:142px"></div>
+    <div class="tag" style="left:24px;top:24px">New arrival</div>
+    <img src="assets/logo-reversed.png" class="abs" style="right:24px;top:22px;width:96px;z-index:5" alt="">
+    <div class="abs" style="left:24px;right:24px;bottom:24px;z-index:5">
+      <div class="eyebrow" style="font-size:9px">Executive sedan</div>
+      <div class="d" style="font-size:30px;margin:8px 0 14px">2021 Executive<br>Saloon</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px"><span class="chip">Automatic</span><span class="chip">2.0 Turbo</span><span class="chip">48 000 km</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.15);padding-top:14px">
+        <div><div class="note" style="font-size:9px">Price</div><div class="d" style="font-size:18px;margin-top:4px">On enquiry</div></div>
+        <span class="btn" style="padding:10px 14px;font-size:10px"><i class="wa"></i>WhatsApp</span>
+      </div>
+    </div>
+  </div>
+  <div class="abs note" style="left:var(--m);top:970px">Feed post · 1080 × 1350</div>
+  <!-- carousel spec slide -->
+  <div class="abs shadow" style="left:580px;top:400px;width:440px;height:550px;background:var(--carbon);padding:28px;overflow:hidden">
+    <div style="display:flex;justify-content:space-between"><div class="eyebrow" style="font-size:9px">Slide 3 / 5 · Key specifications</div><img src="assets/mark-x.svg" style="width:22px" alt=""></div>
+    <div class="d" style="font-size:26px;margin:26px 0 24px">The details<br>that matter.</div>
+    <div class="spec">
+      <div><small>Year</small><span>2021</span></div><div><small>Transmission</small><span>Automatic</span></div>
+      <div><small>Engine</small><span>2.0 Turbo petrol</span></div><div><small>Mileage</small><span>48 000 km</span></div>
+      <div><small>Drive</small><span>Rear-wheel</span></div><div><small>Seats</small><span>5</span></div>
+      <div><small>Colour</small><span>Obsidian black</span></div><div><small>Status</small><span>Available</span></div>
+    </div>
+    <div class="note" style="margin-top:24px;font-size:9px;line-height:1.7">Illustrative listing. Publish only verified<br>specifications, price and availability.</div>
+  </div>
+  <div class="abs note" style="left:580px;top:970px">Carousel detail · 1080 × 1350</div>
+  <!-- story phone -->
+  <div class="phone" style="left:1060px;top:360px;transform:scale(.92);transform-origin:top left">
+    <div class="notch"></div>
+    <div class="scr" style="background:var(--ink)">
+      <div class="stage" style="--fl:62%"></div>
+      <div class="car" data-car="sedan" style="width:480px;left:-140px;top:252px"></div>
+      <div class="abs" style="left:14px;right:14px;top:46px;display:flex;gap:4px;z-index:5"><div style="flex:1;height:2px;background:#fff"></div><div style="flex:1;height:2px;background:rgba(255,255,255,.3)"></div><div style="flex:1;height:2px;background:rgba(255,255,255,.3)"></div></div>
+      <img src="assets/logo-reversed.png" class="abs" style="left:20px;top:64px;width:96px;z-index:5" alt="">
+      <div class="abs" style="left:20px;top:118px;z-index:5"><div class="eyebrow" style="font-size:9px">Just arrived</div><div class="d" style="font-size:30px;margin-top:8px">Your next<br>drive<br>starts here.</div></div>
+      <div class="abs" style="left:20px;right:20px;bottom:70px;z-index:5"><div class="d" style="font-size:16px">2021 Executive Saloon</div><div class="small" style="color:#C9CFD8;margin-top:4px">Automatic · 2.0 Turbo · 48 000 km</div></div>
+      <div class="abs" style="left:20px;right:20px;bottom:20px;z-index:5"><span class="btn" style="width:100%;justify-content:center;padding:12px;font-size:10px"><i class="wa"></i>Enquire on WhatsApp</span></div>
+    </div>
+  </div>
+  <div class="abs note" style="left:1060px;top:970px">Story / Status · 1080 × 1920</div>
+  <div class="abs" style="left:var(--m);top:1080px;width:1200px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;border-top:1px solid #2c323c;padding-top:36px">
+    <div><div class="d" style="font-size:13px;color:var(--green);margin-bottom:8px">Model first</div><div class="small">The vehicle name is the headline on every stock advert.</div></div>
+    <div><div class="d" style="font-size:13px;color:var(--green);margin-bottom:8px">Three chips</div><div class="small">Transmission, engine and mileage. Nothing more on the cover.</div></div>
+    <div><div class="d" style="font-size:13px;color:var(--green);margin-bottom:8px">One action</div><div class="small">WhatsApp, because that is where Zimbabwean buyers already are.</div></div>
+    <div><div class="d" style="font-size:13px;color:var(--green);margin-bottom:8px">Verified only</div><div class="small">Price, finance and import status appear only when confirmed.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     10 — DIGITAL SHOWROOM
+============================================================ -->
+<section class="panel light" id="p10" data-name="10-digital-showroom" style="height:1420px">
+  <div class="head"><div class="note"><b>10</b>Digital showroom</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px;width:1200px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div class="d" style="font-size:60px">Find your<br>next vehicle.</div>
+    <div class="body" style="width:440px;font-size:16px">A showroom that loads quickly on variable connections, filters stock in two taps and keeps WhatsApp within reach on every screen.</div>
+  </div>
+  <!-- browser -->
+  <div class="abs shadow" style="left:var(--m);top:400px;width:900px;height:700px;background:#fff;border-radius:10px;overflow:hidden">
+    <div style="height:36px;background:#E3E7EC;display:flex;align-items:center;gap:7px;padding:0 14px"><i style="width:10px;height:10px;border-radius:50%;background:#C7CDD5"></i><i style="width:10px;height:10px;border-radius:50%;background:#C7CDD5"></i><i style="width:10px;height:10px;border-radius:50%;background:#C7CDD5"></i><div style="margin-left:20px;height:20px;width:300px;border-radius:4px;background:#fff;font-size:10px;color:#8A93A0;display:flex;align-items:center;padding:0 10px">exquisitecars.co.zw</div><div class="note" style="margin-left:auto;font-size:9px">Concept</div></div>
+    <div style="position:relative;height:360px;background:var(--ink);overflow:hidden">
+      <div class="stage" style="--fl:80%"></div>
+      <div class="car" data-car="sedan" style="width:520px;left:360px;top:120px"></div>
+      <div class="abs" style="left:0;right:0;top:0;height:56px;display:flex;align-items:center;padding:0 32px;gap:26px;z-index:5;font-size:11px;color:#C9CFD8;letter-spacing:.08em">
+        <img src="assets/logo-reversed.png" style="width:100px;margin-right:auto" alt=""><span>Vehicles</span><span>Finance</span><span>Sell your car</span><span>About</span><span class="btn" style="padding:8px 12px;font-size:9px"><i class="wa" style="width:12px;height:12px"></i>Enquire</span>
+      </div>
+      <div class="abs" style="left:32px;top:110px;z-index:5;color:#fff"><div class="eyebrow" style="font-size:9px">Excellence through passion</div><div class="d" style="font-size:42px;margin-top:12px">Drive your<br>distinction.</div></div>
+      <div class="abs" style="left:32px;right:32px;bottom:24px;z-index:5;background:#fff;display:grid;grid-template-columns:1fr 1fr 1fr 130px;height:52px;box-shadow:0 10px 30px rgba(0,0,0,.4)">
+        <div style="padding:9px 16px;border-right:1px solid #E3E7EC"><div class="note" style="font-size:8px">Body type</div><div style="font-size:12px;color:#10141C;margin-top:3px">Any ▾</div></div>
+        <div style="padding:9px 16px;border-right:1px solid #E3E7EC"><div class="note" style="font-size:8px">Make</div><div style="font-size:12px;color:#10141C;margin-top:3px">All makes ▾</div></div>
+        <div style="padding:9px 16px"><div class="note" style="font-size:8px">Budget</div><div style="font-size:12px;color:#10141C;margin-top:3px">Any ▾</div></div>
+        <div style="background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Montserrat;font-weight:700;font-size:11px;letter-spacing:.14em">SEARCH</div>
+      </div>
+    </div>
+    <div style="padding:28px 32px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><div class="d" style="font-size:18px;color:#10141C">Latest arrivals</div><div style="font-size:11px;color:var(--navy);font-weight:600">View all stock →</div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px">
+        <div style="border:1px solid #E3E7EC"><div style="position:relative;height:130px;background:var(--carbon);overflow:hidden"><div class="stage" style="--fl:78%"></div><div class="car" data-car="sedan" style="width:250px;left:4px;top:28px"></div></div><div style="padding:12px 14px"><div style="font-size:13px;font-weight:600;color:#10141C">2021 Executive Saloon</div><div style="font-size:11px;color:#6B7482;margin:4px 0 10px">Automatic · 48 000 km</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700;color:var(--navy)">On enquiry</span><span style="font-size:10px;color:var(--green);font-weight:700;letter-spacing:.1em">ENQUIRE</span></div></div></div>
+        <div style="border:1px solid #E3E7EC"><div style="position:relative;height:130px;background:var(--carbon);overflow:hidden"><div class="stage" style="--fl:78%"></div><div class="car" data-car="suv" style="width:250px;left:4px;top:24px"></div></div><div style="padding:12px 14px"><div style="font-size:13px;font-weight:600;color:#10141C">2020 Family SUV</div><div style="font-size:11px;color:#6B7482;margin:4px 0 10px">Automatic · 7 seats</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700;color:var(--navy)">On enquiry</span><span style="font-size:10px;color:var(--green);font-weight:700;letter-spacing:.1em">ENQUIRE</span></div></div></div>
+        <div style="border:1px solid #E3E7EC"><div style="position:relative;height:130px;background:var(--carbon);overflow:hidden"><div class="stage" style="--fl:78%"></div><div class="car" data-car="hatch" style="width:250px;left:4px;top:30px"></div></div><div style="padding:12px 14px"><div style="font-size:13px;font-weight:600;color:#10141C">2022 City Hatch</div><div style="font-size:11px;color:#6B7482;margin:4px 0 10px">Manual · 21 000 km</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700;color:var(--navy)">On enquiry</span><span style="font-size:10px;color:var(--green);font-weight:700;letter-spacing:.1em">ENQUIRE</span></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="abs note" style="left:var(--m);top:1124px">Desktop homepage · 1440 px</div>
+  <!-- phone detail page -->
+  <div class="phone" style="left:1040px;top:440px">
+    <div class="notch"></div>
+    <div class="scr" style="background:#fff">
+      <div style="position:relative;height:250px;background:var(--ink);overflow:hidden"><div class="stage" style="--fl:80%"></div><div class="car" data-car="sedan" style="width:300px;left:-10px;top:100px"></div><div class="abs" style="left:16px;top:48px;font-size:16px;color:#fff;z-index:5">←</div><div class="abs" style="right:16px;bottom:12px;font-size:10px;color:#fff;z-index:5;background:rgba(0,0,0,.5);padding:3px 8px">1 / 18</div></div>
+      <div style="padding:16px">
+        <div class="eyebrow" style="font-size:8px">Executive sedan · Available</div>
+        <div style="font-family:Montserrat;font-weight:800;font-size:18px;color:#10141C;margin:6px 0 2px;text-transform:uppercase">2021 Executive Saloon</div>
+        <div style="font-size:12px;color:var(--navy);font-weight:700">Price on enquiry</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#E3E7EC;margin:14px 0;border:1px solid #E3E7EC">
+          <div style="background:#fff;padding:8px"><div class="note" style="font-size:7px">Mileage</div><div style="font-size:11px;color:#10141C;margin-top:2px">48 000 km</div></div>
+          <div style="background:#fff;padding:8px"><div class="note" style="font-size:7px">Gearbox</div><div style="font-size:11px;color:#10141C;margin-top:2px">Automatic</div></div>
+          <div style="background:#fff;padding:8px"><div class="note" style="font-size:7px">Engine</div><div style="font-size:11px;color:#10141C;margin-top:2px">2.0 Turbo</div></div>
+          <div style="background:#fff;padding:8px"><div class="note" style="font-size:7px">Fuel</div><div style="font-size:11px;color:#10141C;margin-top:2px">Petrol</div></div>
+        </div>
+        <div class="bar" style="width:90%;margin-bottom:7px;height:7px"></div><div class="bar" style="width:70%;height:7px"></div>
+      </div>
+      <div class="abs" style="left:16px;right:16px;bottom:18px;display:grid;gap:8px">
+        <span class="btn" style="justify-content:center;padding:13px;font-size:10px"><i class="wa"></i>Enquire on WhatsApp</span>
+        <span class="btn ghost" style="justify-content:center;padding:12px;font-size:10px;color:#10141C;border-color:#C7CDD5">Book a viewing</span>
+      </div>
+    </div>
+  </div>
+  <div class="abs note" style="left:1040px;top:1100px">Vehicle detail · 390 px</div>
+  <!-- journey -->
+  <div class="abs" style="left:var(--m);top:1200px;width:1200px">
+    <div class="eyebrow" style="margin-bottom:22px">Enquiry journey</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:2px solid var(--navy)">
+      <div style="padding-top:16px"><div class="d" style="font-size:14px">01 Browse</div><div class="small" style="color:#5E6774">Filter by body, make, budget</div></div>
+      <div style="padding-top:16px"><div class="d" style="font-size:14px">02 Shortlist</div><div class="small" style="color:#5E6774">Save and compare vehicles</div></div>
+      <div style="padding-top:16px;border-top:4px solid var(--green);margin-top:-3px"><div class="d" style="font-size:14px;color:var(--green)">03 WhatsApp</div><div class="small" style="color:#5E6774">Pre-filled message with the stock number</div></div>
+      <div style="padding-top:16px"><div class="d" style="font-size:14px">04 Viewing</div><div class="small" style="color:#5E6774">Book a time at the showroom</div></div>
+      <div style="padding-top:16px"><div class="d" style="font-size:14px">05 Handover</div><div class="small" style="color:#5E6774">Paperwork, keys, photograph</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     11 — CORPORATE IDENTITY
+============================================================ -->
+<section class="panel" id="p11" data-name="11-corporate-identity" style="height:1350px;background:var(--navy-d)">
+  <div class="head"><div class="note" style="color:#7F93AE"><b>11</b>Corporate identity</div><div class="note" style="color:#7F93AE">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px"><div class="d" style="font-size:56px">Built for business.<br><span style="font-weight:300;color:#9FB2CC">Designed to be remembered.</span></div></div>
+  <div class="abs" style="inset:0;background:radial-gradient(ellipse 60% 50% at 55% 60%,rgba(255,255,255,.08),rgba(0,0,0,0) 70%)"></div>
+  <!-- letterhead / quotation -->
+  <div class="abs shadow" style="left:150px;top:420px;width:480px;height:680px;background:#fff;transform:rotate(-4deg);padding:44px 44px;color:#10141C">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><img src="assets/logo-primary.png" style="width:150px" alt=""><div style="text-align:right"><div class="d" style="font-size:20px;color:var(--navy)">Quotation</div><div style="font-size:9px;color:#6B7482;margin-top:6px">Ref. EQ-0000 · 4 October 2026</div></div></div>
+    <div style="height:2px;background:var(--green);width:40px;margin:28px 0 20px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;font-size:9px;color:#6B7482"><div><div class="note" style="font-size:7px;margin-bottom:6px">Prepared for</div><div class="bar" style="width:80%;height:6px;margin-bottom:5px"></div><div class="bar" style="width:60%;height:6px"></div></div><div><div class="note" style="font-size:7px;margin-bottom:6px">Vehicle</div><div style="font-size:10px;color:#10141C;font-weight:600">2021 Executive Saloon</div><div>Stock no. 0000</div></div></div>
+    <div style="margin-top:26px;border-top:1px solid #E3E7EC">
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #E3E7EC;font-size:10px"><span>Vehicle price</span><span class="bar" style="width:60px;height:6px"></span></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #E3E7EC;font-size:10px"><span>Registration and documentation</span><span class="bar" style="width:46px;height:6px"></span></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #E3E7EC;font-size:10px"><span>Pre-delivery inspection</span><span class="bar" style="width:40px;height:6px"></span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:11px;font-weight:700;color:var(--navy)"><span>Total</span><span class="bar" style="width:70px;height:7px;background:var(--navy)"></span></div>
+    </div>
+    <div style="margin-top:20px"><div class="bar" style="width:100%;height:5px;margin-bottom:6px;background:#E9EDF2"></div><div class="bar" style="width:92%;height:5px;margin-bottom:6px;background:#E9EDF2"></div><div class="bar" style="width:70%;height:5px;background:#E9EDF2"></div></div>
+    <div class="abs" style="left:44px;right:44px;bottom:30px;display:flex;justify-content:space-between;font-size:8px;color:#8A93A0;border-top:1px solid #E3E7EC;padding-top:10px"><span>Harare, Zimbabwe</span><span style="color:var(--green);font-weight:700;letter-spacing:.14em">EXCELLENCE THROUGH PASSION</span></div>
+  </div>
+  <!-- document cover -->
+  <div class="abs shadow" style="left:560px;top:470px;width:420px;height:590px;background:var(--carbon);transform:rotate(3deg);overflow:hidden">
+    <div class="stage" style="--fl:66%"></div>
+    <div class="car" data-car="sedan" style="width:400px;left:10px;top:260px"></div>
+    <img src="assets/logo-reversed.png" class="abs" style="left:34px;top:34px;width:140px;z-index:5" alt="">
+    <div class="abs" style="left:34px;bottom:40px;z-index:5"><div class="eyebrow" style="font-size:9px">Vehicle file</div><div class="d" style="font-size:28px;margin-top:10px">Ownership<br>documents</div></div>
+  </div>
+  <!-- business cards -->
+  <div class="abs shadow" style="left:960px;top:460px;width:315px;height:175px;background:var(--carbon);transform:rotate(-6deg);display:flex;align-items:center;justify-content:center"><img src="assets/logo-reversed.png" style="width:210px" alt=""></div>
+  <div class="abs shadow" style="left:990px;top:700px;width:315px;height:175px;background:#fff;transform:rotate(4deg);padding:22px;color:#10141C">
+    <img src="assets/mark-x.svg" class="abs" style="right:20px;top:20px;width:30px" alt="">
+    <div style="font-family:Montserrat;font-weight:800;font-size:14px;text-transform:uppercase">Tendai Moyo</div>
+    <div style="font-size:9px;color:var(--green);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-top:3px">Sales Consultant</div>
+    <div style="position:absolute;left:22px;bottom:20px;font-size:9px;line-height:1.7;color:#3D4550">+263 7X XXX XXXX<br>WhatsApp · Harare<br>exquisitecars.co.zw</div>
+    <div style="position:absolute;right:0;bottom:0;width:6px;height:60px;background:var(--green)"></div>
+  </div>
+  <div class="abs note" style="left:var(--m);bottom:70px;color:#7F93AE">Fictitious names and figures for presentation only</div>
+  <div class="abs note" style="right:var(--m);bottom:70px;color:#7F93AE">Quotation · Document cover · Business card 90 × 50 mm</div>
+</section>
+
+<!-- ============================================================
+     12 — PHYSICAL BRAND EXPERIENCE
+============================================================ -->
+<section class="panel" id="p12" data-name="12-physical-brand" style="height:1450px;background:var(--ink)">
+  <div class="head"><div class="note"><b>12</b>Physical brand experience</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px"><div class="d" style="font-size:56px">A brand you can recognise<br><span style="font-weight:300;color:#8D97A5">from a distance.</span></div></div>
+  <!-- facade -->
+  <div class="plate abs" style="left:var(--m);top:380px;width:1200px;height:600px">
+    <img class="ph" src="photos/12-facade.jpg" onerror="this.remove()" alt="">
+    <div class="abs" style="inset:0;background:linear-gradient(180deg,#0A1424 0%,#1D3150 50%,#6A5A64 78%,#C08A5C 100%)"></div>
+    <svg class="abs" style="left:0;top:0;width:100%;height:100%" viewBox="0 0 1200 600" preserveAspectRatio="none"><path d="M0 470 V420 H40 V400 H80 V430 H120 V380 H150 V430 H1050 V390 H1090 V410 H1130 V370 H1160 V420 H1200 V470Z" fill="#0D121A"/></svg>
+    <div class="abs" style="left:160px;top:170px;width:820px;height:330px;background:#0E131A"></div>
+    <div class="abs" style="left:160px;top:170px;width:820px;height:86px;background:var(--navy);display:flex;align-items:center;padding-left:40px;box-shadow:0 0 60px rgba(120,160,215,.25)"><img src="assets/logo-reversed.png" style="width:250px;filter:drop-shadow(0 0 12px rgba(255,255,255,.25))" alt=""></div>
+    <div class="abs" style="left:160px;top:256px;width:820px;height:4px;background:var(--green)"></div>
+    <div class="abs" style="left:190px;top:280px;width:760px;height:220px;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 0 124px,#0E131A 124px 130px),linear-gradient(180deg,#F2D7A8 0%,#C99C68 60%,#7B5A3B 100%);opacity:.9"></div>
+    <div class="abs" style="left:1040px;top:160px;width:70px;height:340px;background:var(--navy);display:flex;flex-direction:column;align-items:center;padding-top:26px;gap:20px"><img src="assets/mark-x.svg" style="width:44px" alt=""><div style="writing-mode:vertical-rl;font-family:Montserrat;font-weight:800;font-size:18px;letter-spacing:.3em;color:#fff">EXQUISITE</div></div>
+    <div class="abs" style="left:0;right:0;top:500px;bottom:0;background:linear-gradient(180deg,#1A1E25,#0B0D11)"></div>
+    <div class="car" data-car="suv" style="width:360px;left:250px;top:384px"></div>
+    <div class="car" data-car="sedan" style="width:360px;left:590px;top:394px;transform:scaleX(-1)"></div>
+    <div class="cap">Conceptual mockup · showroom fascia and pylon</div>
+  </div>
+  <div class="abs" style="left:var(--m);top:1000px;width:1200px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+    <!-- windscreen board -->
+    <div class="plate" style="height:340px;background:#141922;display:flex;align-items:center;justify-content:center">
+      <div class="shadow" style="width:180px;height:255px;background:#fff;color:#10141C;padding:16px;position:relative">
+        <img src="assets/logo-primary.png" style="width:110px" alt="">
+        <div style="height:2px;width:24px;background:var(--green);margin:12px 0"></div>
+        <div style="font-family:Montserrat;font-weight:800;font-size:13px;text-transform:uppercase;line-height:1.1">2021 Executive Saloon</div>
+        <div style="font-size:8px;color:#6B7482;margin-top:8px;line-height:1.6">Automatic · 2.0 Turbo<br>48 000 km · Petrol</div>
+        <div class="abs" style="left:0;right:0;bottom:0;background:var(--navy);color:#fff;padding:10px 16px"><div style="font-size:7px;letter-spacing:.2em;opacity:.7">SCAN OR WHATSAPP</div><div style="font-family:Montserrat;font-weight:800;font-size:12px;margin-top:2px">STOCK 0000</div></div>
+      </div>
+      <div class="cap">Windscreen display board · A4</div>
+    </div>
+    <!-- backdrop -->
+    <div class="plate" style="height:340px">
+      <div class="abs" style="inset:0;background:linear-gradient(180deg,#1F3B60 0%,#132744 70%,#0b1424 70%,#070b12 100%)"></div>
+      <div class="abs" style="inset:0;background-image:url(assets/mark-x.svg);background-size:46px;background-repeat:space;opacity:.07;height:70%"></div>
+      <img src="assets/logo-reversed.png" class="abs" style="left:50%;top:60px;width:200px;transform:translateX(-50%)" alt="">
+      <div class="car" data-car="sedan" style="width:340px;left:22px;top:136px"></div>
+      <div class="cap">Handover photography backdrop</div>
+    </div>
+    <!-- uniform -->
+    <div class="plate" style="height:340px;background:radial-gradient(circle at 50% 40%,#2A303A,#0B0E13 75%)">
+      <svg class="abs" style="left:50%;top:40px;transform:translateX(-50%)" width="240" height="280" viewBox="0 0 240 280">
+        <path d="M60 20 L95 8 Q120 30 145 8 L180 20 L232 70 L205 112 L184 96 L184 272 L56 272 L56 96 L35 112 L8 70 Z" fill="#132744" stroke="#24406A"/>
+        <path d="M95 8 Q120 30 145 8 L140 4 Q120 20 100 4 Z" fill="#0b1424"/>
+      </svg>
+      <img src="assets/mark-x.svg" class="abs" style="left:calc(50% + 22px);top:110px;width:26px" alt="">
+      <div class="cap">Team shirt · embroidered monogram</div>
+    </div>
+  </div>
+  <div class="abs note" style="left:var(--m);bottom:56px">Architectural visuals are conceptual mockups, not existing premises</div>
+</section>
+
+<!-- ============================================================
+     13 — CUSTOMER EXPERIENCE
+============================================================ -->
+<section class="panel light" id="p13" data-name="13-customer-experience" style="height:1300px">
+  <div class="head"><div class="note"><b>13</b>Customer experience</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px;width:1200px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div class="d" style="font-size:52px">The experience continues<br><span style="color:var(--navy)">after the keys.</span></div>
+    <div class="body" style="width:400px;font-size:16px">The handover is the moment a buyer is most likely to share. Design it to be photographed.</div>
+  </div>
+  <!-- key box -->
+  <div class="abs" style="left:var(--m);top:420px;width:600px;height:560px;background:#D9DFE6;overflow:hidden">
+    <div class="abs shadow" style="left:70px;top:120px;width:460px;height:310px;background:var(--navy);border-radius:4px">
+      <div class="abs" style="left:24px;top:24px;right:24px;bottom:24px;background:#132744;border-radius:2px;box-shadow:inset 0 6px 20px rgba(0,0,0,.5)"></div>
+      <svg class="abs" style="left:150px;top:80px" width="160" height="150" viewBox="0 0 160 150"><rect x="40" y="10" width="80" height="120" rx="30" fill="#0B0E13" stroke="#3A414C" stroke-width="2"/><circle cx="80" cy="50" r="10" fill="#1A1F27" stroke="#4a525e"/><circle cx="80" cy="85" r="10" fill="#1A1F27" stroke="#4a525e"/><rect x="72" y="0" width="16" height="16" rx="4" fill="#A9B0BA"/></svg>
+    </div>
+    <div class="abs shadow" style="left:330px;top:300px;width:230px;height:150px;background:#fff;transform:rotate(-5deg);padding:18px;color:#10141C">
+      <img src="assets/mark-x.svg" style="width:22px" alt="">
+      <div style="font-family:Montserrat;font-weight:800;font-size:15px;text-transform:uppercase;margin-top:12px;line-height:1.1">Welcome to<br>the drive.</div>
+      <div style="font-size:8px;color:#6B7482;margin-top:10px">With thanks from the Exquisite Cars team.</div>
+    </div>
+    <div class="cap" style="color:#5E6774">Key presentation box and welcome card</div>
+  </div>
+  <!-- handover checklist -->
+  <div class="abs shadow" style="left:730px;top:420px;width:270px;height:380px;background:#fff;padding:24px;color:#10141C">
+    <img src="assets/logo-primary.png" style="width:100px" alt="">
+    <div class="d" style="font-size:14px;margin:18px 0 14px">Handover checklist</div>
+    <div style="font-size:10px;line-height:2.3;color:#3D4550">
+      <div><span style="color:var(--green);font-weight:700">✓</span>&nbsp; Documents explained</div>
+      <div><span style="color:var(--green);font-weight:700">✓</span>&nbsp; Features walkthrough</div>
+      <div><span style="color:var(--green);font-weight:700">✓</span>&nbsp; Spare key and manual</div>
+      <div><span style="color:var(--green);font-weight:700">✓</span>&nbsp; Fuel and inspection</div>
+      <div><span style="color:var(--green);font-weight:700">✓</span>&nbsp; Handover photograph</div>
+      <div><span style="color:#C7CDD5;font-weight:700">○</span>&nbsp; Seven-day follow-up call</div>
+    </div>
+    <div class="abs" style="left:24px;right:24px;bottom:22px;border-top:1px solid #E3E7EC;padding-top:10px;font-size:8px;color:#8A93A0">Customer signature</div>
+  </div>
+  <!-- testimonial template -->
+  <div class="abs shadow" style="left:1030px;top:420px;width:270px;height:380px;background:var(--carbon);overflow:hidden;color:#fff">
+    <div style="position:relative;height:170px;overflow:hidden"><div class="stage navy" style="--fl:80%"></div><div class="car" data-car="suv" style="width:250px;left:10px;top:48px"></div><div class="abs" style="right:10px;top:10px;font-family:Montserrat;font-size:8px;letter-spacing:.2em;color:#fff;background:rgba(0,0,0,.5);padding:4px 6px;z-index:5">CUSTOMER PHOTO</div></div>
+    <div style="padding:20px">
+      <div class="d" style="font-size:40px;color:var(--green);line-height:.6">“</div>
+      <div class="bar" style="background:#3A414C;width:100%;height:7px;margin:4px 0 7px"></div><div class="bar" style="background:#3A414C;width:88%;height:7px;margin-bottom:7px"></div><div class="bar" style="background:#3A414C;width:64%;height:7px"></div>
+      <div style="margin-top:18px;font-family:Montserrat;font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase">Customer name</div>
+      <div style="font-size:9px;color:#8A93A0;margin-top:4px">Vehicle · Month Year</div>
+    </div>
+  </div>
+  <div class="abs note" style="left:1030px;top:820px">Testimonial template</div>
+  <!-- delivery card -->
+  <div class="abs shadow" style="left:730px;top:860px;width:570px;height:120px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 28px;gap:24px">
+    <img src="assets/mark-x.svg" style="width:40px" alt="">
+    <div><div class="eyebrow" style="font-size:9px;color:#8FE0A0">Delivery card</div><div class="d" style="font-size:20px;margin-top:6px">Your vehicle is ready.</div><div style="font-size:11px;color:#AFC0D6;margin-top:4px">WhatsApp message sent the day before handover, with time and location.</div></div>
+  </div>
+  <div class="abs" style="left:var(--m);top:1060px;width:1200px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;border-top:1px solid #C7CDD5;padding-top:36px">
+    <div><div class="d" style="font-size:14px;color:var(--navy);margin-bottom:8px">Before</div><div class="small" style="color:#5E6774">A branded WhatsApp confirmation with the time, location and what to bring.</div></div>
+    <div><div class="d" style="font-size:14px;color:var(--navy);margin-bottom:8px">During</div><div class="small" style="color:#5E6774">A presentation box, a checklist and a photograph against the brand backdrop.</div></div>
+    <div><div class="d" style="font-size:14px;color:var(--navy);margin-bottom:8px">After</div><div class="small" style="color:#5E6774">A seven-day call and a testimonial request, published only with written consent.</div></div>
+  </div>
+  <div class="abs note" style="left:var(--m);bottom:56px">Proposed experience. Does not describe existing dealership services.</div>
+</section>
+
+<!-- ============================================================
+     14 — INTEGRATED CAMPAIGN
+============================================================ -->
+<section class="panel" id="p14" data-name="14-integrated-campaign" style="height:1400px;background:var(--ink)">
+  <div class="head"><div class="note"><b>14</b>Integrated campaign</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px"><div class="d" style="font-size:72px">One idea.<br><span style="color:var(--green)">Every touchpoint.</span></div></div>
+  <!-- billboard scene -->
+  <div class="plate abs" style="left:var(--m);top:400px;width:1200px;height:620px">
+    <img class="ph" src="photos/14-billboard.jpg" onerror="this.remove()" alt="">
+    <div class="abs" style="inset:0;background:linear-gradient(180deg,#0A1424 0%,#23395A 52%,#8A6A5E 82%,#D19A62 100%)"></div>
+    <svg class="abs" style="left:0;bottom:0;width:100%;height:220px" viewBox="0 0 1200 220" preserveAspectRatio="none" fill="#07090C"><path d="M0 220 V150 H60 V120 H110 V160 H170 V90 H210 V140 H280 V110 H330 V60 H350 V30 H366 V60 H392 V150 H460 V120 H520 V160 H600 V100 H640 V150 H720 V130 H780 V70 H820 V150 H900 V120 H960 V160 H1040 V110 H1100 V150 H1200 V220Z"/></svg>
+    <div class="abs" style="left:640px;top:330px;width:16px;height:290px;background:#0B0E13"></div>
+        <div class="abs shadow" style="left:300px;top:90px;width:700px;height:262px;background:var(--ink);overflow:hidden;outline:8px solid #0B0E13">
+      <div class="stage" style="--fl:76%"></div>
+      <div class="car" data-car="sedan" style="width:360px;left:320px;top:104px"></div>
+      <img src="assets/logo-reversed.png" class="abs" style="left:30px;top:26px;width:130px;z-index:5" alt="">
+      <div class="abs d" style="left:30px;top:96px;font-size:44px;z-index:5">Drive your<br>distinction.</div>
+      <div class="abs" style="left:30px;bottom:24px;z-index:5;font-family:Montserrat;font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--green)">WHATSAPP +263 7X XXX XXXX</div>
+    </div>
+    <div class="abs" style="left:300px;top:352px;width:700px;height:60px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0))"></div>
+    <div class="cap">Outdoor · 48-sheet billboard concept</div>
+  </div>
+  <!-- row of formats -->
+  <div class="abs" style="left:var(--m);top:1040px;width:1200px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px">
+    <div class="plate" style="height:250px;background:#1A1F27;display:flex;align-items:center;justify-content:center">
+      <div style="position:relative;width:150px;height:212px;background:var(--ink);overflow:hidden" class="shadow"><div class="stage" style="--fl:66%"></div><div class="car" data-car="sedan" style="width:150px;left:0;top:96px"></div><img src="assets/logo-reversed.png" class="abs" style="left:12px;top:12px;width:56px;z-index:5" alt=""><div class="abs d" style="left:12px;top:36px;font-size:15px;z-index:5">Drive your<br>distinction.</div></div>
+      <div class="cap">Print · A4 flyer</div>
+    </div>
+    <div class="plate" style="height:250px;background:#1A1F27;display:flex;align-items:center;justify-content:center">
+      <div style="position:relative;width:170px;height:170px;background:var(--ink);overflow:hidden" class="shadow"><div class="stage" style="--fl:70%"></div><div class="car" data-car="suv" data-accent="green" style="width:170px;left:0;top:56px"></div><div class="abs d" style="left:12px;top:14px;font-size:13px;z-index:5">Exquisite<br>Select</div></div>
+      <div class="cap">Social · 1:1</div>
+    </div>
+    <div class="plate" style="height:250px;background:#1A1F27;display:flex;align-items:center;justify-content:center">
+      <div style="position:relative;width:118px;height:210px;background:var(--ink);overflow:hidden;border-radius:12px;outline:4px solid #050608" class="shadow"><div class="stage" style="--fl:62%"></div><div class="car" data-car="sedan" style="width:220px;left:-70px;top:66px"></div><div class="abs d" style="left:10px;top:20px;font-size:12px;z-index:5">New<br>arrival</div><div class="abs" style="left:10px;right:10px;bottom:10px;height:18px;background:var(--green);z-index:5"></div></div>
+      <div class="cap">WhatsApp Status · 9:16</div>
+    </div>
+    <div class="plate" style="height:250px;background:#1A1F27;display:flex;align-items:center;justify-content:center">
+      <div style="position:relative;width:220px;height:124px;background:var(--ink);overflow:hidden" class="shadow"><div class="stage" style="--fl:78%"></div><div class="car" data-car="sedan" style="width:150px;left:66px;top:36px"></div><div class="abs d" style="left:12px;top:14px;font-size:12px;z-index:5">Drive your<br>distinction.</div><div class="abs" style="left:96px;top:46px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);z-index:6"></div><div class="abs" style="left:107px;top:54px;border-left:10px solid #10141C;border-top:6px solid transparent;border-bottom:6px solid transparent;z-index:7"></div></div>
+      <div class="cap">Video · 16:9 pre-roll</div>
+    </div>
+  </div>
+  <div class="abs note" style="left:var(--m);bottom:56px">Same headline · same grade · same grid · same single action</div>
+</section>
+
+<!-- ============================================================
+     15 — DESIGN DETAILS
+============================================================ -->
+<section class="panel" id="p15" data-name="15-design-details" style="height:1350px">
+  <div class="head"><div class="note"><b>15</b>Design details</div><div class="note">Exquisite Cars — Drive Your Distinction</div></div>
+  <div class="abs" style="left:var(--m);top:170px"><div class="d" style="font-size:72px">Consistency is<br>the difference.</div></div>
+  <div class="abs" style="left:var(--m);top:400px;width:1200px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:380px 380px;gap:20px">
+    <!-- X macro -->
+    <div class="plate" style="grid-row:span 2;background:var(--ink)">
+      <img src="assets/mark-x.svg" class="abs" style="left:50%;top:44%;width:300px;transform:translate(-50%,-50%)" alt="">
+      <div class="abs" style="left:50%;top:44%;width:360px;height:360px;transform:translate(-50%,-50%);border:1px dashed rgba(255,255,255,.18);border-radius:50%"></div>
+      <div class="abs" style="left:40px;right:40px;bottom:60px"><div class="d" style="font-size:16px;margin-bottom:8px">The crossing point</div><div class="small">The X divides into four tiles. Its 45° diagonal sets the angle for dividers, arrows and crop lines throughout the system.</div></div>
+    </div>
+    <!-- type hierarchy -->
+    <div class="plate" style="background:var(--plat);color:#10141C;padding:34px">
+      <div class="note" style="margin-bottom:16px">Hierarchy</div>
+      <div class="eyebrow" style="font-size:10px">Executive sedan</div>
+      <div class="d" style="font-size:38px;margin:8px 0 10px">2021 Executive<br>Saloon</div>
+      <div style="font-size:14px;color:#3D4550">Automatic · 2.0 Turbo · 48 000 km</div>
+      <div style="display:flex;gap:30px;margin-top:22px;font-family:Montserrat;font-size:10px;font-weight:600;letter-spacing:.12em;color:#8A93A0"><span>13 / 34%</span><span>38 / 96%</span><span>14 / 0%</span></div>
+    </div>
+    <!-- grid overlay -->
+    <div class="plate" style="background:var(--ink)">
+      <div class="stage" style="--fl:70%"></div>
+      <div class="car" data-car="sedan" style="width:370px;left:4px;top:146px"></div>
+      <div class="abs" style="inset:0;background:repeating-linear-gradient(90deg,rgba(62,171,82,.08) 0 23px,rgba(0,0,0,0) 23px 32.3px);z-index:4"></div>
+      <div class="abs" style="left:24px;top:24px;right:24px;bottom:24px;border:1px solid rgba(62,171,82,.6);z-index:4"></div>
+      <div class="abs d" style="left:32px;top:40px;font-size:30px;z-index:5">Drive your<br>distinction.</div>
+      <div class="cap">12-column grid · 6% margin</div>
+    </div>
+    <!-- grade -->
+    <div class="plate" style="background:var(--carbon);padding:30px">
+      <div class="note" style="margin-bottom:18px">Image grade</div>
+      <div style="display:flex;height:60px"><div style="flex:1;background:#0E1218"></div><div style="flex:1;background:#18202B"></div><div style="flex:1;background:#2A3442"></div><div style="flex:1;background:#4A5564"></div><div style="flex:1;background:#7D8794"></div><div style="flex:1;background:#BAC1CA"></div><div style="flex:1;background:#EEF1F4"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px" class="note"><span>Lifted blacks 6%</span><span>Neutral whites</span></div>
+      <div class="small" style="margin-top:28px">Shadows lean cool towards navy. Highlights stay neutral so paint colours read true. Green never appears in the grade, only in graphics.</div>
+    </div>
+    <!-- card anatomy -->
+    <div class="plate" style="background:var(--plat);padding:30px;color:#10141C">
+      <div class="note" style="margin-bottom:18px">Vehicle card anatomy</div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:start">
+        <div style="border:1px solid #D5DAE1;background:#fff"><div style="position:relative;height:84px;background:var(--carbon);overflow:hidden"><div class="stage" style="--fl:78%"></div><div class="car" data-car="sedan" style="width:146px;left:2px;top:20px"></div></div><div style="padding:8px"><div style="font-size:9px;font-weight:600">2021 Executive Saloon</div><div style="font-size:7px;color:#6B7482;margin:3px 0 6px">Automatic · 48 000 km</div><div style="font-size:8px;color:var(--green);font-weight:700;letter-spacing:.1em">ENQUIRE</div></div></div>
+        <div style="font-size:12px;line-height:2;color:#3D4550"><div><b style="color:var(--green)">1</b>&nbsp; Image · 3:2, same angle</div><div><b style="color:var(--green)">2</b>&nbsp; Model and year</div><div><b style="color:var(--green)">3</b>&nbsp; Two key facts</div><div><b style="color:var(--green)">4</b>&nbsp; Price or “on enquiry”</div><div><b style="color:var(--green)">5</b>&nbsp; One action</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     16 — CLOSING
+============================================================ -->
+<section class="panel" id="p16" data-name="16-closing" style="height:1000px;background:var(--ink)">
+  <div class="stage" style="--fl:72%"></div>
+  <div class="plate abs" style="inset:0;background:transparent">
+    <img class="ph" src="photos/16-closing.jpg" onerror="this.remove()" alt="">
+    <div class="car" data-car="sedan" data-flip="1" data-tail="1" style="width:900px;left:250px;top:438px"></div>
+  </div>
+  <div class="abs" style="inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(7,9,12,.0),rgba(7,9,12,.35));z-index:6"></div>
+  <div class="abs" style="left:0;right:0;top:120px;text-align:center;z-index:10">
+    <img src="assets/logo-reversed.png" style="width:420px;display:inline-block" alt="Exquisite Cars">
+    <div class="d" style="font-size:16px;letter-spacing:.5em;margin-top:44px;font-weight:500;color:#C9CFD8">Drive your distinction.</div>
+  </div>
+  <div class="abs" style="left:var(--m);right:var(--m);bottom:56px;display:flex;justify-content:space-between;align-items:flex-end;z-index:10">
+    <div class="note" style="line-height:1.9;color:#8A93A0">A self-initiated automotive brand concept<br><span style="color:#fff">by Edward Katai · Katungo, Harare</span></div>
+    <div class="note" style="text-align:right;line-height:1.9;max-width:700px">Concept project. Not commissioned by or affiliated with Exquisite Cars.<br>Proposed applications are illustrative. Logo © its owner.</div>
+  </div>
+</section>
+
+<script>
+/* Stylised, rim-lit vehicle silhouettes. Any .plate with a photos/*.jpg file present
+   shows the photograph instead. */
+(function(){
+  const SHAPES={
+    sedan:{
+      body:"M72,252 C58,246 52,226 54,204 C56,186 64,172 84,164 L142,154 C196,148 236,146 266,142 C310,122 352,102 400,92 C460,82 556,80 616,86 C660,92 704,110 750,132 C806,136 864,144 906,154 C934,160 950,172 954,192 C958,214 954,240 942,252 L848,256 A76,76 0 0 0 696,256 L304,256 A76,76 0 0 0 152,256 Z",
+      glass:["M322,140 C356,120 392,106 432,100 L516,97 L516,138 Z","M528,97 L602,98 C636,102 672,116 706,134 L528,138 Z"],
+      wheels:[[228,250,58],[772,250,58]],
+      line:"M88,196 C300,186 700,180 944,190",
+      head:"M904,160 C928,164 944,172 950,184 L912,180 Z",
+      tail:"M56,188 L88,180 L90,196 L58,200 Z",
+      door:["M522,140 L520,252","M330,142 L326,246"],
+      mirror:"M712,132 L728,131 L730,140 L714,141 Z"
+    },
+    suv:{
+      body:"M70,236 L64,150 C66,130 76,120 98,116 L150,112 C178,82 204,62 240,58 L620,56 C664,58 706,80 748,112 C816,120 878,130 914,142 C940,150 954,166 956,188 L956,222 C954,232 946,236 936,236 L856,236 A86,86 0 0 0 684,236 L318,236 A86,86 0 0 0 146,236 Z",
+      glass:["M172,110 C196,84 214,70 244,66 L420,64 L420,108 Z","M432,64 L596,63 L596,108 L432,108 Z","M608,63 L622,64 C660,68 700,90 732,110 L608,110 Z"],
+      wheels:[[232,240,68],[770,240,68]],
+      line:"M70,168 C300,160 700,156 952,164",
+      head:"M912,140 C934,146 948,156 954,170 L916,166 Z",
+      tail:"M60,140 L80,136 L82,176 L62,178 Z",
+      door:["M426,114 L424,232","M602,114 L606,232"],
+      mirror:"M712,104 L736,102 L740,116 L716,118 Z"
+    },
+    hatch:{
+      body:"M150,252 C136,246 132,226 134,206 L138,140 C140,124 152,116 170,112 C210,90 250,72 300,66 L560,64 C610,68 660,96 700,122 C760,130 812,140 846,152 C866,160 876,174 878,194 C880,218 876,242 866,252 L790,256 A70,70 0 0 0 650,256 L360,256 A70,70 0 0 0 220,256 Z",
+      glass:["M182,116 C220,94 260,80 300,76 L440,74 L440,120 L178,122 Z","M452,74 L560,74 C600,78 640,98 672,120 L452,120 Z"],
+      wheels:[[290,252,54],[720,252,54]],
+      line:"M142,186 C350,178 600,174 870,184",
+      head:"M840,156 C860,162 872,172 876,184 L846,180 Z",
+      tail:"M136,150 L150,146 L152,186 L138,188 Z",
+      door:["M446,124 L444,250"],
+      mirror:"M640,110 L662,108 L666,122 L644,124 Z"
+    }
+  };
+  let n=0;
+  function wheel(cx,cy,r,id){
+    let s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="#050607"/>`;
+    s+=`<circle cx="${cx}" cy="${cy}" r="${r*.7}" fill="url(#rm${id})" stroke="#5a616b" stroke-width="1.5"/>`;
+    for(let i=0;i<5;i++){for(const o of [-7,7]){const a=i*72+o;s+=`<path d="M${cx-r*.05},${cy-r*.14} L${cx-r*.07},${cy-r*.67} L${cx+r*.07},${cy-r*.67} L${cx+r*.05},${cy-r*.14} Z" fill="#b8c0ca" opacity=".62" transform="rotate(${a} ${cx} ${cy})"/>`}}
+    s+=`<circle cx="${cx}" cy="${cy}" r="${r*.16}" fill="#20252c" stroke="#7d8591"/>`;
+    s+=`<path d="M${cx-r*.92},${cy-r*.3} A${r},${r} 0 0 1 ${cx+r*.6},${cy-r*.8}" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2"/>`;
+    return s;
+  }
+  function car(type,accent,flip,tail){
+    const S=SHAPES[type]||SHAPES.sedan, id=++n;
+    const rim=accent==='green'?'#7FE59A':'#FFFFFF';
+    let g=`<defs>
+      <linearGradient id="bd${id}" x1="0" y1="60" x2="0" y2="260" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3a4352"/><stop offset=".35" stop-color="#171c25"/><stop offset=".7" stop-color="#0d1016"/><stop offset="1" stop-color="#050608"/></linearGradient>
+      <linearGradient id="sw${id}" x1="0" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse"><stop offset=".15" stop-color="#fff" stop-opacity="0"/><stop offset=".55" stop-color="#fff" stop-opacity=".10"/><stop offset=".75" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="rl${id}" x1="0" y1="56" x2="0" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${rim}" stop-opacity=".95"/><stop offset=".45" stop-color="${rim}" stop-opacity=".35"/><stop offset="1" stop-color="${rim}" stop-opacity="0"/></linearGradient>
+      <linearGradient id="gl${id}" x1="0" y1="60" x2="0" y2="140" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3b4a60"/><stop offset="1" stop-color="#06080b"/></linearGradient>
+      <radialGradient id="rm${id}"><stop offset="0" stop-color="#2b3038"/><stop offset=".8" stop-color="#14171c"/><stop offset="1" stop-color="#4a515b"/></radialGradient>
+      <radialGradient id="sh${id}"><stop offset="0" stop-color="#000" stop-opacity=".85"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+      <linearGradient id="fm${id}" x1="0" y1="308" x2="0" y2="420" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="mk${id}"><rect x="0" y="308" width="1000" height="112" fill="url(#fm${id})"/></mask>
+      <clipPath id="cp${id}"><path d="${S.body}"/></clipPath>
+      <filter id="gw${id}" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="5"/></filter>
+    </defs>`;
+    let c=`<path d="${S.body}" fill="url(#bd${id})"/>`;
+    c+=`<rect x="0" y="0" width="1000" height="320" fill="url(#sw${id})" clip-path="url(#cp${id})"/>`;
+    S.glass.forEach(p=>{c+=`<path d="${p}" fill="url(#gl${id})" stroke="rgba(255,255,255,.08)"/>`});
+    S.door.forEach(p=>{c+=`<path d="${p}" stroke="rgba(0,0,0,.6)" stroke-width="1.5"/>`});
+    c+=`<path d="${S.line}" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.5" clip-path="url(#cp${id})"/>`;
+    c+=`<path d="${S.mirror}" fill="#0c0f14" stroke="rgba(255,255,255,.2)"/>`;
+    c+=`<path d="${S.body}" fill="none" stroke="url(#rl${id})" stroke-width="2.4"/>`;
+    S.wheels.forEach(w=>{c+=wheel(w[0],w[1],w[2],id)});
+    c+=`<path d="${S.head}" fill="#EAF2FF"/><path d="${S.head}" fill="#CFE3FF" filter="url(#gw${id})" opacity=".9"/>`;
+    c+=`<path d="${S.tail}" fill="#B3122B" opacity="${tail?1:.75}"/>`;
+    if(tail){c+=`<path d="${S.tail}" fill="#FF2A4A" filter="url(#gw${id})" opacity=".9" transform="scale(1)"/>`}
+    const shadow=`<ellipse cx="500" cy="306" rx="470" ry="14" fill="url(#sh${id})"/>`;
+    const refl=`<g mask="url(#mk${id})"><g transform="translate(0,616) scale(1,-1)">${c}</g></g>`;
+    const fx=flip?` transform="translate(1000,0) scale(-1,1)"`:'';
+    return `<svg viewBox="0 0 1000 420" width="100%" style="display:block;overflow:visible">${g}<g${fx}>${refl}${shadow}${c}</g></svg>`;
+  }
+  document.querySelectorAll('[data-car]').forEach(el=>{
+    el.innerHTML=car(el.dataset.car,el.dataset.accent,el.dataset.flip,el.dataset.tail);
+  });
+})();
+</script>
+</body>
+</html>
