@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<idPkg:Story xmlns:idPkg="http://ns.adobe.com/AdobeInDesign/idml/1.0/packaging" DOMVersion="10.0">
+	<Story Self="u222" AppliedTOCStyle="n" TrackChanges="false" StoryTitle="$ID/" AppliedNamedGrid="n">
+		<StoryPreference OpticalMarginAlignment="false" OpticalMarginSize="12" FrameType="TextFrameType" StoryOrientation="Horizontal" StoryDirection="LeftToRightDirection" />
+		<InCopyExportOption IncludeGraphicProxies="true" IncludeAllResources="false" />
+		<XMLElement Self="di3i13i2" MarkupTag="XMLTag/Story" XMLContent="u222">
+			<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/$ID/NormalParagraphStyle">
+				<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/MyBoldStyle">
+					<XMLElement Self="di3i13i2i1" MarkupTag="XMLTag/article">
+						<Content>Before they sold out Odd Future semiotics slow-carb biodiesel, XOXO occupy Pitchfork deep v swag. You probably haven’t heard of them organic hella Brooklyn, PBR vegan drinking vinegar tote bag.</Content>
+					</XMLElement>
+					<Content> </Content>
+					<Br />
+					<Br />
+					<Content>. </Content>
+					<XMLElement Self="di3i13i2i2" MarkupTag="XMLTag/informations">
+						<Content>Cosby sweater organic selfies, hella Neutra locavore Austin gluten-free direct trade synth. Thundercats dreamcatcher master cleanse tote bag, Portland narwhal bespoke plaid Truffaut Odd Future Banksy. </Content>
+					</XMLElement>
+				</CharacterStyleRange>
+			</ParagraphStyleRange>
+		</XMLElement>
+	</Story>
+</idPkg:Story>
