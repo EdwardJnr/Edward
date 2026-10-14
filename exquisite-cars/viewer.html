@@ -1,0 +1,72 @@
+<title>Exquisite Cars Case Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+/* Layout: a Behance-style vertical scroll of the 16 panels, framed by a project header and the upload copy. Single dark look by design. */
+:root{
+  --ink:#07090C; --carbon:#10141C; --line:#232832; --fg:#E9EDF2; --mute:#8A93A0; --green:#3EAB52; --navy:#1F3B60;
+  --display:"Montserrat",Helvetica,Arial,sans-serif; --body:"Inter",Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--ink);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1400px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{padding-block:48px 32px;display:grid;gap:10px}
+.eyebrow{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--green)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,56px);line-height:1;text-transform:uppercase;margin:0;text-wrap:balance}
+.sub{color:var(--mute);max-width:62ch;margin:0}
+.panels{max-width:1400px;margin:0 auto;display:grid}
+.panels img{display:block;width:100%;height:auto}
+section.copy{padding-block:64px 80px;display:grid;gap:28px}
+h2{font-family:var(--display);font-weight:800;font-size:28px;text-transform:uppercase;margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{border:1px solid var(--line);background:var(--carbon);padding:22px;display:grid;gap:12px;align-content:start;min-width:0}
+.card h3{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);margin:0;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.card p{margin:0;white-space:pre-wrap;color:var(--fg);font-size:15px}
+button{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;background:var(--green);color:#fff;border:0;padding:8px 12px;cursor:pointer}
+button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.note{color:var(--mute);font-size:13px;max-width:70ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Behance case study · 16 panels</div>
+    <h1>Exquisite Cars — Drive Your Distinction</h1>
+    <p class="sub">Brand identity and automotive campaign concept for a Zimbabwean dealership. Self-initiated concept by Edward Katai, Katungo.</p>
+  </header>
+</div>
+
+<div class="panels" id="panels"></div>
+
+<div class="wrap">
+  <section class="copy">
+    <h2>Upload copy</h2>
+    <div class="grid">
+      <div class="card"><h3>Title <button data-copy="t">Copy</button></h3><p id="t">Exquisite Cars — Drive Your Distinction</p></div>
+      <div class="card"><h3>Tags <button data-copy="g">Copy</button></h3><p id="g">Automotive Branding, Brand Identity, Art Direction, Automotive Advertising, Graphic Design, Visual Identity, Social Media Design, UI Design, Car Dealership, Zimbabwe</p></div>
+      <div class="card"><h3>Creative fields</h3><p>Branding · Advertising · Art Direction</p></div>
+    </div>
+    <div class="card"><h3>Description <button data-copy="d">Copy</button></h3><p id="d">What if a dealership's identity could say more than the vehicles it sells?
+
+This self-initiated concept builds a complete brand experience around the existing Exquisite Cars identity and its tagline, "Excellence Through Passion". The green X and navy wordmark stay exactly as supplied. Around them sits a cinematic visual system of carbon black, midnight navy and a restrained signature green.
+
+The campaign platform, Drive Your Distinction, connects each vehicle to the reason someone buys it: presence for the executive, value for the everyday driver, craftsmanship for the enthusiast. One master poster sets the type, grade and grid, and every later piece inherits it: stock adverts, WhatsApp Status, a digital showroom, stationery, signage and the handover itself.
+
+Every listing is designed to be read on a phone in two seconds and answered with one tap on WhatsApp.
+
+Self-initiated concept project. Not commissioned by or affiliated with Exquisite Cars. Proposed applications are illustrative; names, figures and listings are fictitious. Logo © its owner.
+
+Creative direction and design: Edward Katai · Katungo, Harare</p></div>
+    <p class="note">Upload panels 01 to 16 in order, canvas width 1400 px, no spacing, background #07090C. Use panel 01 for the cover, cropped to 808 × 632.</p>
+  </section>
+</div>
+
+<script>
+const names=["01-cover","02-opening-statement","03-brief-opportunity","04-logo-brand-dna","05-visual-system","06-art-direction","07-campaign-master","08-campaign-extensions","09-stock-advertising","10-digital-showroom","11-corporate-identity","12-physical-brand","13-customer-experience","14-integrated-campaign","15-design-details","16-closing"];
+const box=document.getElementById('panels');
+names.forEach((n,i)=>{const im=new Image();im.src='exports/'+n+'.jpg';im.alt='Panel '+(i+1)+' — '+n.slice(3).replace(/-/g,' ');im.loading=i<2?'eager':'lazy';box.appendChild(im)});
+document.querySelectorAll('button[data-copy]').forEach(b=>b.addEventListener('click',()=>{
+  const el=document.getElementById(b.dataset.copy);
+  navigator.clipboard.writeText(el.textContent).then(()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1600)})
+  .catch(()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected'});
+}));
+</script>

@@ -754,6 +754,7 @@ body{background:#000;font-family:Inter,Helvetica,Arial,sans-serif;color:#fff;-we
       line:"M88,196 C300,186 700,180 944,190",
       head:"M904,160 C928,164 944,172 950,184 L912,180 Z",
       tail:"M56,188 L88,180 L90,196 L58,200 Z",
+      belt:"M300,143 L520,141 L712,137 C790,142 862,150 906,158",
       door:["M522,140 L520,252","M330,142 L326,246"],
       mirror:"M712,132 L728,131 L730,140 L714,141 Z"
     },
@@ -764,6 +765,7 @@ body{background:#000;font-family:Inter,Helvetica,Arial,sans-serif;color:#fff;-we
       line:"M70,168 C300,160 700,156 952,164",
       head:"M912,140 C934,146 948,156 954,170 L916,166 Z",
       tail:"M60,140 L80,136 L82,176 L62,178 Z",
+      belt:"M150,113 L742,113 C820,121 880,132 914,144",
       door:["M426,114 L424,232","M602,114 L606,232"],
       mirror:"M712,104 L736,102 L740,116 L716,118 Z"
     },
@@ -774,6 +776,7 @@ body{background:#000;font-family:Inter,Helvetica,Arial,sans-serif;color:#fff;-we
       line:"M142,186 C350,178 600,174 870,184",
       head:"M840,156 C860,162 872,172 876,184 L846,180 Z",
       tail:"M136,150 L150,146 L152,186 L138,188 Z",
+      belt:"M176,124 L676,122 C760,132 812,142 846,154",
       door:["M446,124 L444,250"],
       mirror:"M640,110 L662,108 L666,122 L644,124 Z"
     }
@@ -795,6 +798,7 @@ body{background:#000;font-family:Inter,Helvetica,Arial,sans-serif;color:#fff;-we
       <linearGradient id="sw${id}" x1="0" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse"><stop offset=".15" stop-color="#fff" stop-opacity="0"/><stop offset=".55" stop-color="#fff" stop-opacity=".10"/><stop offset=".75" stop-color="#fff" stop-opacity="0"/></linearGradient>
       <linearGradient id="rl${id}" x1="0" y1="56" x2="0" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${rim}" stop-opacity=".95"/><stop offset=".45" stop-color="${rim}" stop-opacity=".35"/><stop offset="1" stop-color="${rim}" stop-opacity="0"/></linearGradient>
       <linearGradient id="gl${id}" x1="0" y1="60" x2="0" y2="140" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3b4a60"/><stop offset="1" stop-color="#06080b"/></linearGradient>
+      <linearGradient id="bl${id}" x1="0" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse"><stop offset=".1" stop-color="#fff" stop-opacity="0"/><stop offset=".55" stop-color="#fff" stop-opacity=".55"/><stop offset=".95" stop-color="#fff" stop-opacity=".1"/></linearGradient>
       <radialGradient id="rm${id}"><stop offset="0" stop-color="#2b3038"/><stop offset=".8" stop-color="#14171c"/><stop offset="1" stop-color="#4a515b"/></radialGradient>
       <radialGradient id="sh${id}"><stop offset="0" stop-color="#000" stop-opacity=".85"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
       <linearGradient id="fm${id}" x1="0" y1="308" x2="0" y2="420" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
@@ -807,6 +811,7 @@ body{background:#000;font-family:Inter,Helvetica,Arial,sans-serif;color:#fff;-we
     S.glass.forEach(p=>{c+=`<path d="${p}" fill="url(#gl${id})" stroke="rgba(255,255,255,.08)"/>`});
     S.door.forEach(p=>{c+=`<path d="${p}" stroke="rgba(0,0,0,.6)" stroke-width="1.5"/>`});
     c+=`<path d="${S.line}" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.5" clip-path="url(#cp${id})"/>`;
+    c+=`<path d="${S.belt}" fill="none" stroke="url(#bl${id})" stroke-width="1.6"/>`;
     c+=`<path d="${S.mirror}" fill="#0c0f14" stroke="rgba(255,255,255,.2)"/>`;
     c+=`<path d="${S.body}" fill="none" stroke="url(#rl${id})" stroke-width="2.4"/>`;
     S.wheels.forEach(w=>{c+=wheel(w[0],w[1],w[2],id)});
