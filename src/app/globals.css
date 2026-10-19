@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* Katungo brand: Forest Teal leads, Mint Seafoam highlights. Serif headings, Helvetica body. */
+:root {
+  --ground: #f4f6f2;
+  --raised: #fbfcfa;
+  --sunk: #e3ebe5;
+  --ink: #14201b;
+  --muted: #4f5d56;
+  --line: #cdd8d1;
+  --teal: #0f4c3a;
+  --teal-hover: #0b3a2c;
+  --mint: #2fd79a;
+  --danger: #a3261b;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-raised: var(--raised);
+  --color-sunk: var(--sunk);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-teal: var(--teal);
+  --color-teal-hover: var(--teal-hover);
+  --color-mint: var(--mint);
+  --color-danger: var(--danger);
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: Gloock, Georgia, "Times New Roman", serif;
+  --font-mono: "DM Mono", ui-monospace, Menlo, monospace;
+}
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+/* Shared component classes. Kept in the base layer so Tailwind utilities on the
+   same element (w-28, p-4, border-t-mint) still override them. */
+@layer base {
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .field {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--raised);
+    border-radius: 2px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .field:focus {
+    outline: 2px solid var(--teal);
+    outline-offset: 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--teal);
+    color: var(--raised);
+    border-radius: 2px;
+    padding: 0.55rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .btn:hover {
+    background: var(--teal-hover);
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .btn-quiet {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.85rem;
+    background: var(--raised);
+  }
+
+  .btn-quiet:hover {
+    border-color: var(--muted);
+  }
+
+  .card {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    padding: 1.5rem;
+  }
+}
