@@ -1,0 +1,85 @@
+@page { size: A4; margin: 0; }
+:root {
+  --teal: #0F4C3A;
+  --mint: #2FD79A;
+  --ink: #1A2420;
+  --muted: #5B6B65;
+  --rule: #D7E2DD;
+  --tint: #F1F7F4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #fff; }
+body {
+  font-family: "Helvetica Neue", Helvetica, "Liberation Sans", Arial, sans-serif;
+  color: var(--ink);
+  font-size: 9.6pt;
+  line-height: 1.45;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.page { width: 210mm; height: 297mm; display: flex; flex-direction: column; overflow: hidden; }
+header {
+  background: var(--teal);
+  color: #fff;
+  padding: 13mm 16mm 10mm;
+  position: relative;
+}
+header::after {
+  content: ""; position: absolute; left: 16mm; bottom: 0;
+  width: 28mm; height: 1.6mm; background: var(--mint);
+}
+.wordmark {
+  font-family: Georgia, "Liberation Serif", "Times New Roman", serif;
+  font-size: 26pt; letter-spacing: 0.5px; line-height: 1;
+}
+.kicker {
+  font-size: 7.6pt; letter-spacing: 1.6px; text-transform: uppercase;
+  color: var(--mint); margin-top: 3mm;
+}
+header h1 {
+  font-family: Georgia, "Liberation Serif", serif;
+  font-weight: normal; font-size: 19pt; line-height: 1.2; margin-top: 2mm;
+}
+header .sub { color: #CFE3DB; margin-top: 2mm; font-size: 9pt; }
+main { padding: 8mm 16mm 0; flex: 1; }
+h2 {
+  font-size: 7.8pt; letter-spacing: 1.6px; text-transform: uppercase;
+  color: var(--teal); border-bottom: 0.6pt solid var(--rule);
+  padding-bottom: 1.4mm; margin: 5.2mm 0 2.6mm;
+}
+h2:first-child { margin-top: 0; }
+p + p { margin-top: 2mm; }
+.lead {
+  font-family: Georgia, "Liberation Serif", serif;
+  font-size: 12pt; line-height: 1.4; color: var(--teal);
+}
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.card { background: var(--tint); padding: 3.4mm 3.6mm; border-top: 1mm solid var(--teal); }
+.card h3 { font-size: 9.6pt; color: var(--teal); margin-bottom: 1.2mm; }
+.card p { font-size: 8.8pt; color: var(--ink); }
+ol.steps { list-style: none; counter-reset: s; }
+ol.steps li {
+  counter-increment: s; position: relative; padding-left: 8mm; margin-bottom: 1.6mm;
+}
+ol.steps li::before {
+  content: counter(s); position: absolute; left: 0; top: 0.2mm;
+  width: 5mm; height: 5mm; border-radius: 50%; background: var(--mint);
+  color: var(--teal); font-weight: bold; font-size: 7.6pt; text-align: center; line-height: 5mm;
+}
+ol.steps b { color: var(--teal); }
+table { width: 100%; border-collapse: collapse; font-size: 8.8pt; }
+th { text-align: left; font-size: 7.4pt; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: normal; padding: 0 2mm 1.4mm 0; border-bottom: 0.6pt solid var(--rule); }
+td { padding: 1.8mm 2mm 1.8mm 0; border-bottom: 0.6pt solid var(--rule); vertical-align: top; }
+td.n { white-space: nowrap; color: var(--teal); font-weight: bold; }
+.arrow { color: var(--mint); font-weight: bold; }
+.flow { display: flex; align-items: stretch; gap: 2mm; }
+.flow .card { flex: 1; }
+.flow .arrow { align-self: center; font-size: 13pt; color: var(--teal); }
+footer {
+  margin: 0 16mm; padding: 4mm 0 9mm; border-top: 0.6pt solid var(--rule);
+  display: flex; justify-content: space-between; font-size: 8.4pt; color: var(--muted);
+}
+footer b { color: var(--teal); }
+.fill { color: #9AA9A3; }
+.note { font-size: 8pt; color: var(--muted); margin-top: 2mm; }
