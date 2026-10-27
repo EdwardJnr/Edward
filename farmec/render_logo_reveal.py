@@ -53,10 +53,10 @@ for f in range(N):
     img+=lay[...,None]*RED
     img+=sweep[...,None]*(255-RED)*lay[...,None]
     # soft red bloom
-    bl=np.array(Image.fromarray((lay*255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(28))).astype(np.float32)/255
-    frame=np.zeros((H,W,3),np.float32)
-    frame[oy:oy+lh,ox:ox+lw]=np.maximum(img, bl[...,None]*RED*0.22)
-    # fade to and from black edges
+    full=np.zeros((H,W),np.uint8); full[oy:oy+lh,ox:ox+lw]=(lay*255).astype(np.uint8)
+    bl=np.array(Image.fromarray(full).filter(ImageFilter.GaussianBlur(28))).astype(np.float32)/255
+    frame=bl[...,None]*RED*0.22
+    frame[oy:oy+lh,ox:ox+lw]=np.maximum(img, frame[oy:oy+lh,ox:ox+lw])
     fr=Image.fromarray(np.clip(frame,0,255).astype(np.uint8))
     if sc!=1.0:
         nw,nh=int(W*sc),int(H*sc); fr=fr.resize((nw,nh),Image.BICUBIC).crop(((nw-W)//2,(nh-H)//2,(nw-W)//2+W,(nh-H)//2+H))
