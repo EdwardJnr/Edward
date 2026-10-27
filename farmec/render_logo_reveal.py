@@ -1,6 +1,6 @@
 import numpy as np, subprocess, sys
 from PIL import Image, ImageFilter
-W,H,FPS,DUR=1920,1080,30,3.0
+W,H,FPS,DUR=1920,1080,30,2.0
 N=int(FPS*DUR)
 src=Image.open(sys.argv[1]).convert('RGBA')
 a=np.array(src).astype(np.float32)
@@ -29,34 +29,31 @@ ff=subprocess.Popen(['ffmpeg','-y','-loglevel','error','-f','rawvideo','-pix_fmt
   '-c:v','libx264','-pix_fmt','yuv420p','-crf','14','-preset','slow','-movflags','+faststart',sys.argv[2]],stdin=subprocess.PIPE)
 for f in range(N):
     t=f/FPS
-    # 1. border draws from top centre, both ways, 0.0–0.9s
-    p=ease(t/0.9)*1.1
+    # 1. border draws from top centre, both ways, 0.0–0.6s
+    p=ease(t/0.6)*1.1
     bmask=border*np.clip((p-ang)*25,0,1)
     lay=bmask.copy()
-    # 2. letters rise in, staggered, 0.45–1.65s
+    # 2. letters rise in, staggered, 0.3–1.1s
     glow=np.zeros_like(A)
     for i,m in enumerate(L):
-        lt=(t-0.45-i*0.11)/0.45
+        lt=(t-0.3-i*0.075)/0.3
         if lt<=0: continue
         e=ease(lt); dy=(1-e)*60*S
         lay=np.maximum(lay,shift(m,0,dy)*eio(lt*1.4))
-    # 3. light sweep across the mark, 1.75–2.35s
-    st=(t-1.75)/0.6
+    # 3. light sweep across the mark, 1.15–1.55s
+    st=(t-1.15)/0.4
     sweep=np.zeros_like(A)
     if 0<st<1:
         cx=-200+st*(lw+400)
         d=(xx+ (yy-lh/2)*0.45)-cx
-        sweep=np.exp(-(d/55)**2)*A*0.85
+        sweep=np.exp(-(d/55)**2)*A*0.4
     # slow push-in over whole clip
     sc=1.0+0.04*eio(t/DUR)
-    img=np.zeros((lh,lw,3),np.float32)
-    img+=lay[...,None]*RED
-    img+=sweep[...,None]*(255-RED)*lay[...,None]
-    # soft red bloom
-    full=np.zeros((H,W),np.uint8); full[oy:oy+lh,ox:ox+lw]=(lay*255).astype(np.uint8)
-    bl=np.array(Image.fromarray(full).filter(ImageFilter.GaussianBlur(28))).astype(np.float32)/255
-    frame=bl[...,None]*RED*0.22
-    frame[oy:oy+lh,ox:ox+lw]=np.maximum(img, frame[oy:oy+lh,ox:ox+lw])
+    col=RED+sweep[...,None]*(255-RED)
+    # composite onto white
+    frame=np.full((H,W,3),255,np.float32)
+    region=frame[oy:oy+lh,ox:ox+lw]
+    frame[oy:oy+lh,ox:ox+lw]=region*(1-lay[...,None])+col*lay[...,None]
     fr=Image.fromarray(np.clip(frame,0,255).astype(np.uint8))
     if sc!=1.0:
         nw,nh=int(W*sc),int(H*sc); fr=fr.resize((nw,nh),Image.BICUBIC).crop(((nw-W)//2,(nh-H)//2,(nw-W)//2+W,(nh-H)//2+H))
