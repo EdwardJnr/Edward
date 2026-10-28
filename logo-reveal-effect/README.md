@@ -2,14 +2,14 @@
 
 A logo reveal effect that works on any logo, made for CapCut.
 
-Open `index.html` (or the published page), drop in a logo and export an MP4. The page reads the logo's shape for itself:
+Open `index.html` (or the published page), drop in a logo, pick an effect and export an MP4. The page reads the logo's shape for itself, so every effect works with any logo.
 
-- **A frame or outline** (like Farmec's rounded border) draws itself from the top centre.
-- **Letters and other pieces** rise into place one after another, from left to right.
-- **A single mark** (an icon or symbol) rises and settles into scale.
-- A soft sheen passes across the logo, with a slow push-in throughout.
+**Clean & Minimalist:** Draw & Rise, Liquid Wipe, Line Matte, Fade & Scale
+**High-Tech & Cinematic:** Glitch, Light Leak, Particle Assembly
+**Dynamic & High-Energy:** Kinetic Type (with your own keywords), Shockwave, 3D Flip
+**Organic & Texture:** Smoke & Ink, Hologram
 
-You choose the background (white, black, green screen or any colour), the format (16:9, 9:16, 1:1, 4:5), the length (1–5 seconds) and the logo size. Export works in Chrome, Edge and Safari on a computer.
+You choose the background (white, black, green screen or any colour), the format (16:9, 9:16, 1:1, 4:5), the length (1–5 seconds) and the logo size. On green screen, the effects leave out full-frame flashes and washes so the key stays clean. Export works in Chrome, Edge and Safari on a computer.
 
 ## Using it in CapCut
 
