@@ -60,6 +60,8 @@ canvas#preview { display: block; max-width: 100%; max-height: 62vh; height: auto
 .seg button { font: inherit; font-size: 13px; padding: 7px 11px; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
 .seg button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); font-weight: 600; }
 .seg button:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sw-clear { background: repeating-conic-gradient(#C9D1CD 0 25%, #FFFFFF 0 50%) 0 0 / 6px 6px; }
+canvas#preview.clear { background: repeating-conic-gradient(#D5DCD8 0 25%, #FFFFFF 0 50%) 0 0 / 24px 24px; }
 .sw { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(128,128,128,.5); }
 input[type="range"] { width: 100%; accent-color: var(--accent); }
 input[type="color"] { width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 6px; padding: 2px; background: transparent; cursor: pointer; }
@@ -88,7 +90,7 @@ kbd { font-family: var(--mono); font-size: 12px; background: var(--stage); borde
 <div class="wrap">
   <header>
     <h1>Logo <span>Reveal</span> Studio</h1>
-    <p class="lede">Drop in any logo, choose one of twelve reveal effects, and export an MP4 ready for CapCut.</p>
+    <p class="lede">Drop in any logo, choose one of twelve reveal effects, and export an MP4 for CapCut, or a transparent video with no background.</p>
   </header>
 
   <div class="bench">
@@ -129,6 +131,7 @@ kbd { font-family: var(--mono); font-size: 12px; background: var(--stage); borde
           <button type="button" data-bg="black" aria-pressed="false"><span class="sw" style="background:#000"></span>Black</button>
           <button type="button" data-bg="green" aria-pressed="false"><span class="sw" style="background:#00FF00"></span>Green screen</button>
           <button type="button" data-bg="custom" aria-pressed="false"><span class="sw" id="customSw" style="background:#0F4C3A"></span>Custom</button>
+          <button type="button" data-bg="transparent" aria-pressed="false"><span class="sw sw-clear"></span>Transparent</button>
         </div>
         <div class="row" id="customRow" hidden><input type="color" id="customColour" value="#0F4C3A"><span class="status" style="min-height:0">Pick any colour</span></div>
       </div>
@@ -155,6 +158,8 @@ kbd { font-family: var(--mono); font-size: 12px; background: var(--stage); borde
 
       <div class="field">
         <button class="btn primary" id="export" type="button">Export MP4</button>
+        <button class="btn" id="exportPng" type="button" hidden>Export PNG sequence (.zip)</button>
+        <p class="fxdesc" id="clearNote" hidden>Transparent exports a WebM video with no background. For Premiere Pro, After Effects or DaVinci Resolve, the PNG sequence also works.</p>
         <div class="status" id="status" role="status"></div>
       </div>
     </aside>
@@ -178,6 +183,14 @@ kbd { font-family: var(--mono); font-size: 12px; background: var(--stage); borde
           <li>Place it above your footage and set <strong>Blend → Multiply</strong>. The white drops away.</li>
         </ol>
         <p>Works best for dark or saturated logos.</p>
+      </div>
+      <div>
+        <h3>Logo with no background</h3>
+        <ol>
+          <li>Choose <strong>Transparent</strong> and export the WebM.</li>
+          <li>In CapCut, add it as an <strong>Overlay</strong> above your footage. The logo animates with nothing behind it.</li>
+        </ol>
+        <p>If your CapCut version shows a black box behind the logo, export on Green screen instead.</p>
       </div>
       <div>
         <h3>End card or intro</h3>
@@ -421,7 +434,9 @@ const FX = {
     const light = L.colour.map((v, i) => lerp(v, hex(E.bg)[i], 0.45));
     ctx.save(); edge(lead, 0); ctx.clip(); ctx.fillStyle = rgb(light); ctx.fillRect(-20, -20, cw + 40, ch + 40); ctx.restore();
     ctx.save(); edge(mid, 1.3); ctx.clip(); ctx.fillStyle = L.hexColour; ctx.fillRect(-20, -20, cw + 40, ch + 40); ctx.restore();
-    ctx.save(); edge(tail, 2.1); ctx.clip(); ctx.fillStyle = E.bg; ctx.fillRect(-20, -20, cw + 40, ch + 40); logo(ctx, L, R); ctx.restore();
+    ctx.save(); edge(tail, 2.1); ctx.clip();
+    if (E.clear) ctx.clearRect(-20, -20, cw + 40, ch + 40); else { ctx.fillStyle = E.bg; ctx.fillRect(-20, -20, cw + 40, ch + 40); }
+    logo(ctx, L, R); ctx.restore();
   },
 
   stroke(ctx, u, L, R) {
@@ -663,8 +678,9 @@ const FX_LIST = [
 // ---- Draw one frame at time t (seconds) ----
 function draw(ctx, cw, ch, t, L) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
-  const bg = S.bg === "custom" ? S.custom : BG[S.bg];
-  ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
+  const clear = S.bg === "transparent";
+  const bg = clear ? "#FFFFFF" : S.bg === "custom" ? S.custom : BG[S.bg];
+  if (clear) ctx.clearRect(0, 0, cw, ch); else { ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch); }
   if (!L) return;
   const u = t / S.dur * 2;
   const fit = Math.min(cw * S.size / L.W, ch * Math.min(0.62, S.size) / L.H);
@@ -673,7 +689,7 @@ function draw(ctx, cw, ch, t, L) {
   const push = 1 + 0.03 * eio(u / 2);
   ctx.setTransform(push, 0, 0, push, cw / 2 * (1 - push), ch / 2 * (1 - push));
   ctx.imageSmoothingQuality = "high";
-  (FX[S.fx] || FX.signature)(ctx, u, L, R, { cw, ch, t, bg, dark: lum(bg) < 0.5, keyed: S.bg === "green" });
+  (FX[S.fx] || FX.signature)(ctx, u, L, R, { cw, ch, t, bg, clear, dark: clear || lum(bg) < 0.5, keyed: clear || S.bg === "green" });
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
 }
 
@@ -736,7 +752,14 @@ function seg(id, key, after) {
     S[key] = b.dataset[key === "bg" ? "bg" : "ar"]; after && after(); restart();
   });
 }
-seg("bgSeg", "bg", () => { $("customRow").hidden = S.bg !== "custom"; });
+function syncBg() {
+  const clear = S.bg === "transparent";
+  $("customRow").hidden = S.bg !== "custom";
+  preview.classList.toggle("clear", clear);
+  $("export").textContent = clear ? "Export transparent WebM" : "Export MP4";
+  $("exportPng").hidden = !clear; $("clearNote").hidden = !clear;
+}
+seg("bgSeg", "bg", syncBg);
 seg("arSeg", "ar", sizePreview);
 $("customColour").addEventListener("input", e => { S.custom = e.target.value; $("customSw").style.background = S.custom; });
 $("dur").addEventListener("input", e => { S.dur = +e.target.value; $("durOut").textContent = S.dur.toFixed(1) + " s"; restart(); });
@@ -788,14 +811,124 @@ async function encodeMp4() {
   return new Blob([muxer.target.buffer], { type: "video/mp4" });
 }
 
+// ---- Export: transparent WebM ----
+// WebM keeps transparency as a second VPx stream (the alpha plane encoded as luma) stored
+// in each block's BlockAdditions. Two encoders run in step; a small writer builds the file.
+const ebml = (() => {
+  const id = h => { const b = []; for (let i = 0; i < h.length; i += 2) b.push(parseInt(h.substr(i, 2), 16)); return new Uint8Array(b); };
+  const size = n => { const b = new Uint8Array(8); b[0] = 1; for (let i = 7; i >= 1; i--) { b[i] = n & 255; n = Math.floor(n / 256); } return b; };
+  const cat = parts => { const n = parts.reduce((a, p) => a + p.length, 0), o = new Uint8Array(n); let k = 0; for (const p of parts) { o.set(p, k); k += p.length; } return o; };
+  const el = (h, ...data) => { const body = cat(data); return cat([id(h), size(body.length), body]); };
+  const uint = (h, v) => { const b = []; do { b.unshift(v & 255); v = Math.floor(v / 256); } while (v > 0); return el(h, new Uint8Array(b)); };
+  const sint = (h, v) => { const b = new Uint8Array(2); new DataView(b.buffer).setInt16(0, v); return el(h, b); };
+  const str = (h, s) => el(h, new TextEncoder().encode(s));
+  const f64 = (h, v) => { const b = new Uint8Array(8); new DataView(b.buffer).setFloat64(0, v); return el(h, b); };
+  return { el, uint, sint, str, f64, cat };
+})();
+function webmFile(W, H, codecId, frames, durMs) {
+  const E = ebml;
+  const head = E.el("1A45DFA3", E.uint("4286", 1), E.uint("42F7", 1), E.uint("42F2", 4), E.uint("42F3", 8), E.str("4282", "webm"), E.uint("4287", 4), E.uint("4285", 2));
+  const info = E.el("1549A966", E.uint("2AD7B1", 1000000), E.f64("4489", durMs), E.str("4D80", "Logo Reveal Studio"), E.str("5741", "Logo Reveal Studio"));
+  const tracks = E.el("1654AE6B", E.el("AE", E.uint("D7", 1), E.uint("73C5", 1), E.uint("83", 1), E.str("86", codecId), E.uint("9C", 0), E.uint("55EE", 1),
+    E.el("E0", E.uint("B0", W), E.uint("BA", H), E.uint("53C0", 1))));
+  const blocks = frames.map((f, i) => {
+    const pre = new Uint8Array(4); pre[0] = 0x81; new DataView(pre.buffer).setInt16(1, f.ms); pre[3] = 0;
+    return E.el("A0", E.el("A1", pre, f.color),
+      ...(f.key ? [] : [E.sint("FB", frames[i - 1].ms - f.ms)]),
+      E.el("75A1", E.el("A6", E.uint("EE", 1), E.el("A5", f.alpha))));
+  });
+  const cluster = E.el("1F43B675", E.uint("E7", 0), ...blocks);
+  return new Blob([head, E.el("18538067", info, tracks, cluster)], { type: "video/webm" });
+}
+async function encodeWebmAlpha() {
+  const [W, H] = AR[S.ar];
+  if (!("VideoEncoder" in window)) throw new Error("unsupported");
+  let codec = null;
+  for (const c of ["vp09.00.10.08", "vp8"]) {
+    try { if ((await VideoEncoder.isConfigSupported({ codec: c, width: W, height: H, bitrate: 10e6, framerate: FPS })).supported) { codec = c; break; } } catch {}
+  }
+  if (!codec) throw new Error("noalpha");
+  const total = Math.round(S.dur * FPS), colour = new Array(total), alpha = new Array(total);
+  let fail = null;
+  const mk = store => {
+    let n = 0;
+    const e = new VideoEncoder({ output: ch => { const b = new Uint8Array(ch.byteLength); ch.copyTo(b); store[n++] = { data: b, key: ch.type === "key" }; }, error: x => { fail = x; } });
+    e.configure({ codec, width: W, height: H, bitrate: store === colour ? 10e6 : 6e6, framerate: FPS });
+    return e;
+  };
+  const ce = mk(colour), ae = mk(alpha);
+  const cv = canvas(W, H), cx = cv.getContext("2d", { willReadFrequently: true });
+  const out = canvas(W, H), ox = out.getContext("2d");
+  const yuv = new Uint8Array(W * H * 3 / 2); yuv.fill(128, W * H);
+  const fill = S.logo.colour.map(Math.round);
+  for (let i = 0; i < total; i++) {
+    if (fail) throw fail;
+    draw(cx, W, H, i / FPS, S.logo);
+    const im = cx.getImageData(0, 0, W, H), d = im.data;
+    for (let p = 0, q = 0; p < d.length; p += 4, q++) {
+      const a = d[p + 3]; yuv[q] = a;
+      if (a === 0) { d[p] = fill[0]; d[p + 1] = fill[1]; d[p + 2] = fill[2]; }
+      d[p + 3] = 255;
+    }
+    ox.putImageData(im, 0, 0);
+    const ts = Math.round(i * 1e6 / FPS), key = i % FPS === 0;
+    const vc = new VideoFrame(out, { timestamp: ts, duration: Math.round(1e6 / FPS) });
+    const va = new VideoFrame(yuv, { format: "I420", codedWidth: W, codedHeight: H, timestamp: ts, duration: Math.round(1e6 / FPS) });
+    ce.encode(vc, { keyFrame: key }); ae.encode(va, { keyFrame: key }); vc.close(); va.close();
+    while (ce.encodeQueueSize > 4 || ae.encodeQueueSize > 4) await new Promise(r => setTimeout(r, 4));
+    if (i % 6 === 0) { setStatus(`Rendering frame ${i + 1} of ${total}…`); await new Promise(r => setTimeout(r)); }
+  }
+  await ce.flush(); await ae.flush(); ce.close(); ae.close();
+  if (fail) throw fail;
+  const frames = colour.map((c, i) => ({ color: c.data, alpha: alpha[i].data, key: c.key, ms: Math.round(i * 1000 / FPS) }));
+  return webmFile(W, H, codec === "vp8" ? "V_VP8" : "V_VP9", frames, total * 1000 / FPS);
+}
+
+// PNG sequence in an uncompressed ZIP (PNGs are already compressed)
+const CRC = new Uint32Array(256).map((_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
+const crc32 = b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+function zip(files) {
+  const enc = new TextEncoder(), parts = [], dir = [];
+  let off = 0;
+  for (const f of files) {
+    const name = enc.encode(f.name), crc = crc32(f.data), n = f.data.length;
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint32(14, crc, true);
+    h.setUint32(18, n, true); h.setUint32(22, n, true); h.setUint16(26, name.length, true);
+    parts.push(new Uint8Array(h.buffer), name, f.data);
+    const d = new DataView(new ArrayBuffer(46));
+    d.setUint32(0, 0x02014b50, true); d.setUint16(4, 20, true); d.setUint16(6, 20, true); d.setUint32(16, crc, true);
+    d.setUint32(20, n, true); d.setUint32(24, n, true); d.setUint16(28, name.length, true); d.setUint32(42, off, true);
+    dir.push(new Uint8Array(d.buffer), name);
+    off += 30 + name.length + n;
+  }
+  const size = dir.reduce((a, p) => a + p.length, 0), e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true);
+  e.setUint32(12, size, true); e.setUint32(16, off, true);
+  return new Blob([...parts, ...dir, new Uint8Array(e.buffer)], { type: "application/zip" });
+}
+async function encodePngZip() {
+  const [W, H] = AR[S.ar], cv = canvas(W, H), cx = cv.getContext("2d"), total = Math.round(S.dur * FPS), files = [];
+  for (let i = 0; i < total; i++) {
+    draw(cx, W, H, i / FPS, S.logo);
+    const blob = await new Promise(r => cv.toBlob(r, "image/png"));
+    files.push({ name: `${S.name}-${S.fx}_${String(i + 1).padStart(4, "0")}.png`, data: new Uint8Array(await blob.arrayBuffer()) });
+    if (i % 6 === 0) setStatus(`Saving frame ${i + 1} of ${total}…`);
+  }
+  return zip(files);
+}
+
 let downloads = null;
-$("export").addEventListener("click", async () => {
+function fileBase() {
+  const bgName = S.bg === "green" ? "greenscreen" : S.bg === "custom" ? S.custom.slice(1).toLowerCase() : S.bg;
+  return `${S.name}-${S.fx}-${bgName}-${S.ar.replace(":", "x")}-${S.dur}s`;
+}
+async function runExport(make, ext) {
   if (S.busy || !S.logo) return;
-  S.busy = true; $("export").disabled = true;
+  S.busy = true; $("export").disabled = $("exportPng").disabled = true;
   try {
-    const blob = await encodeMp4();
-    const bgName = S.bg === "green" ? "greenscreen" : S.bg === "custom" ? S.custom.slice(1).toLowerCase() : S.bg;
-    const filename = `${S.name}-${S.fx}-${bgName}-${S.ar.replace(":", "x")}-${S.dur}s.mp4`;
+    const blob = await make();
+    const filename = `${fileBase()}.${ext}`;
     if (!downloads) { setStatus("Saving is not available in this view. Open this page on claude.ai in a desktop browser to export.", true); return; }
     setStatus("Confirm the save to download " + filename);
     await downloads.save({ filename, data: blob });
@@ -803,17 +936,20 @@ $("export").addEventListener("click", async () => {
   } catch (e) {
     const code = e && e.code;
     if (e && e.message === "unsupported") setStatus("This browser cannot encode video. Use Chrome, Edge or Safari on a computer.", true);
+    else if (e && e.message === "noalpha") setStatus("This browser cannot make transparent video. Use Chrome or Edge, or export the PNG sequence.", true);
     else if (code === "declined") setStatus("Save cancelled.");
     else if (code === "rate_limited") setStatus("A save is already waiting for confirmation.", true);
     else setStatus("Export failed. Reload the page and try again.", true);
-  } finally { S.busy = false; $("export").disabled = false; }
-});
+  } finally { S.busy = false; $("export").disabled = $("exportPng").disabled = false; }
+}
+$("export").addEventListener("click", () => S.bg === "transparent" ? runExport(encodeWebmAlpha, "webm") : runExport(encodeMp4, "mp4"));
+$("exportPng").addEventListener("click", () => runExport(encodePngZip, "zip"));
 
 sizePreview();
 setFx(S.fx);
 loadLogo(SAMPLE, { label: "Sample: Farmec", slug: "farmec" });
 requestAnimationFrame(loop);
 Promise.resolve(window.claude?.use?.("downloads")).then(d => { downloads = d || null; }).catch(() => {});
-window.__lrs = { S, encodeMp4, draw, AR, FX, setFx };
+window.__lrs = { S, encodeMp4, encodeWebmAlpha, encodePngZip, draw, AR, FX, setFx, syncBg };
 })();
 </script>

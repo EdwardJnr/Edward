@@ -9,9 +9,11 @@ Open `index.html` (or the published page), drop in a logo, pick an effect and ex
 **Dynamic & High-Energy:** Kinetic Type (with your own keywords), Shockwave, 3D Flip
 **Organic & Texture:** Smoke & Ink, Hologram
 
-You choose the background (white, black, green screen or any colour), the format (16:9, 9:16, 1:1, 4:5), the length (1–5 seconds) and the logo size. On green screen, the effects leave out full-frame flashes and washes so the key stays clean. Export works in Chrome, Edge and Safari on a computer.
+You choose the background (white, black, green screen, any colour, or transparent), the format (16:9, 9:16, 1:1, 4:5), the length (1–5 seconds) and the logo size. On green screen, the effects leave out full-frame flashes and washes so the key stays clean. Export works in Chrome, Edge and Safari on a computer.
 
 ## Using it in CapCut
+
+**Logo with no background:** choose Transparent and export the WebM. It keeps a true alpha channel, so the logo animates with nothing behind it. Add it as an Overlay above your footage. If your CapCut version shows a black box behind the logo, export on Green screen instead. For Premiere Pro, After Effects or DaVinci Resolve, the PNG sequence (.zip) also works.
 
 **Logo over footage:** export with Green screen. In CapCut, add the clip as an Overlay above your footage and stretch it to fill the frame. Then open Remove BG → Chroma key, pick the green, and set Intensity to about 20–30 and Shadow to about 10.
 
