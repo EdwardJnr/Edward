@@ -90,7 +90,7 @@ kbd { font-family: var(--mono); font-size: 12px; background: var(--stage); borde
 <div class="wrap">
   <header>
     <h1>Logo <span>Reveal</span> Studio</h1>
-    <p class="lede">Drop in any logo, choose one of twelve reveal effects, and export an MP4 for CapCut, or a transparent video with no background.</p>
+    <p class="lede">Drop in any logo, choose one of thirteen reveal effects, and export an MP4 for CapCut, or a transparent video with no background.</p>
   </header>
 
   <div class="bench">
@@ -285,7 +285,7 @@ function analyse(img) {
   let pieces = comps.filter(c => !c.frame && c.area >= total * 0.0015);
   if (!pieces.length) pieces = comps.filter(c => !c.frame);
   pieces.sort((a, b) => a.cx - b.cx);
-  const G = Math.min(pieces.length, 10);
+  const G = Math.min(pieces.length, 14);
   pieces.forEach((c, i) => c.group = Math.floor(i * G / pieces.length));
   comps.forEach(c => {
     if (c.frame || c.group !== undefined) return;
@@ -319,6 +319,34 @@ function analyse(img) {
   if (!G) groups.push(mk(l => l !== -1));
   const full = mk(() => true);
 
+  // icon / wordmark split for Build & Type: icon = frame, else the pieces before the widest gap
+  const gbox = Array.from({ length: G }, () => ({ x0: W, y0: H, x1: -1, y1: -1 }));
+  comps.forEach(c => {
+    if (c.frame || c.group === undefined) return;
+    const b = gbox[c.group];
+    b.x0 = Math.min(b.x0, c.x0); b.y0 = Math.min(b.y0, c.y0); b.x1 = Math.max(b.x1, c.x1); b.y1 = Math.max(b.y1, c.y1);
+  });
+  let iconGroups = G ? [0] : [], ib;
+  if (frame) iconGroups = [];
+  else if (G > 1) {
+    const gaps = gbox.slice(0, -1).map((b, i) => gbox[i + 1].x0 - b.x1);
+    const sorted = gaps.slice().sort((a, b) => a - b), median = sorted[Math.floor(sorted.length / 2)];
+    const i = gaps.indexOf(Math.max(...gaps));
+    if (gaps[i] > Math.max(2.2 * median, 0.03 * W) && gbox[i].x1 - gbox[0].x0 < 0.5 * W) iconGroups = [...Array(i + 1).keys()];
+  }
+  if (frame) {
+    const fc = comps.find(c => c.frame); ib = { x0: fc.x0, y0: fc.y0, x1: fc.x1, y1: fc.y1 };
+  } else {
+    ib = { x0: W, y0: H, x1: 0, y1: 0 };
+    for (const g of iconGroups) { const b = gbox[g]; ib.x0 = Math.min(ib.x0, b.x0); ib.y0 = Math.min(ib.y0, b.y0); ib.x1 = Math.max(ib.x1, b.x1); ib.y1 = Math.max(ib.y1, b.y1); }
+    if (ib.x1 < ib.x0) ib = { x0: 0, y0: 0, x1: W - 1, y1: H - 1 };
+  }
+  const iconSrc = frame || mk(l => iconGroups.includes(l) || (iconGroups.includes(0) && l === -2)) || full;
+  const ibw = ib.x1 - ib.x0 + 1, ibh = ib.y1 - ib.y0 + 1, iconCv = canvas(ibw, ibh);
+  iconCv.getContext("2d").drawImage(iconSrc, ib.x0, ib.y0, ibw, ibh, 0, 0, ibw, ibh);
+  const build = { ib: { x0: ib.x0, y0: ib.y0, w: ibw, h: ibh }, icon: iconCv, tbox: gbox,
+    text: [...Array(G).keys()].filter(g => !iconGroups.includes(g)) };
+
   // dominant colour of solid pixels
   let cr = 0, cg = 0, cb = 0, cn = 0;
   for (let i = 0; i < N; i++) if (A(i) > 200) { cr += px[i * 4]; cg += px[i * 4 + 1]; cb += px[i * 4 + 2]; cn++; }
@@ -344,7 +372,7 @@ function analyse(img) {
     W, H, P: Math.ceil(0.2 * H), frame, groups: groups.filter(Boolean), full, colour,
     hexColour: "#" + colour.map(v => Math.round(v).toString(16).padStart(2, "0")).join(""),
     tintR: tint("#FF2A55"), tintC: tint("#00D4FF"), shade: tint(rgb(colour.map(v => v * 0.5))),
-    white: tint("#FFFFFF"), pts, pstep: step, work: canvas(1, 1), ws: canvas(W, H)
+    white: tint("#FFFFFF"), pts, pstep: step, work: canvas(1, 1), ws: canvas(W, H), build
   };
 }
 
@@ -419,6 +447,41 @@ const FX = {
       w.globalCompositeOperation = "source-atop"; w.fillStyle = gr; w.fillRect(0, -P, L.W, L.H + 2 * P);
     }
     ctx.drawImage(wk, R.x, R.y - P * R.fit, R.w, (L.H + 2 * P) * R.fit);
+  },
+
+  build(ctx, u, L, R, E) {
+    const B = L.build, f = R.fit, ib = B.ib, nT = B.text.length;
+    const t0 = 1.0, stag = nT ? Math.min(0.09, 0.5 / nT) : 0;
+    let xr = ib.x0 + ib.w;                         // right edge of what is visible so far
+    const prog = B.text.map((g, i) => {
+      const p = clamp((u - t0 - i * stag) / 0.16);
+      if (p > 0) xr = lerp(xr, Math.max(xr, B.tbox[g].x1 + 1), ease(p));
+      return p;
+    });
+    const shift = (L.W / 2 - (ib.x0 + xr) / 2) * f; // keep the visible lockup centred
+    const w = ib.w * f, h = ib.h * f, e = eio((u - 0.62) / 0.42);
+    const big = Math.max(1, Math.min(2.6, E.ch * 0.42 / h, E.cw * 0.5 / w));
+    const s = lerp(big, 1, e);
+    const cx = lerp(E.cw / 2, R.x + (ib.x0 + ib.w / 2) * f + shift, e), cy = lerp(E.ch / 2, R.y + (ib.y0 + ib.h / 2) * f, e);
+    const carve = eio((u - 0.46) / 0.2);
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(s, s);
+    if (carve < 1) {                               // two blocks grow, staggered, then carve away
+      ctx.fillStyle = L.hexColour; ctx.globalAlpha = 1 - carve;
+      const gap = w * 0.05, bw = (w - gap) / 2;
+      [[0, 0, 1], [1, 0.06, -1]].forEach(([k, d, dir]) => {
+        const p = ease((u - d) / 0.42); if (p <= 0) return;
+        const bh = lerp(h * 0.08, h, p);
+        ctx.fillRect(-w / 2 + k * (bw + gap), -bh / 2 + dir * (1 - p) * h * 0.18, bw, bh);
+      });
+    }
+    if (carve > 0) { ctx.globalAlpha = carve; ctx.drawImage(B.icon, -w / 2, -h / 2, w, h); }
+    ctx.restore(); ctx.globalAlpha = 1;
+    B.text.forEach((g, i) => {                     // the name types in, grey first, then full
+      const p = prog[i]; if (p <= 0) return;
+      ctx.globalAlpha = p < 0.5 ? 0.45 * p / 0.5 : 0.45 + 0.55 * (p - 0.5) / 0.5;
+      ctx.drawImage(L.groups[g], R.x + shift, R.y, R.w, R.h);
+    });
+    ctx.globalAlpha = 1;
   },
 
   liquid(ctx, u, L, R, E) {
@@ -659,6 +722,7 @@ const FX = {
 const FX_LIST = [
   ["Clean & Minimalist", [
     ["signature", "Draw & Rise", "The frame draws itself, the pieces rise in one by one, and a sheen passes across."],
+    ["build", "Build & Type", "Two blocks build and carve into the mark, then the name types in beside it."],
     ["liquid", "Liquid Wipe", "Two waves of colour flow across the screen and leave the logo behind them."],
     ["stroke", "Line Matte", "Fine lines draw a track, and the logo is pulled up into view through it."],
     ["fade", "Fade & Scale", "The logo scales up from nothing as it fades in. Classic and corporate."]]],

@@ -4,7 +4,7 @@ A logo reveal effect that works on any logo, made for CapCut.
 
 Open `index.html` (or the published page), drop in a logo, pick an effect and export an MP4. The page reads the logo's shape for itself, so every effect works with any logo.
 
-**Clean & Minimalist:** Draw & Rise, Liquid Wipe, Line Matte, Fade & Scale
+**Clean & Minimalist:** Draw & Rise, Build & Type, Liquid Wipe, Line Matte, Fade & Scale
 **High-Tech & Cinematic:** Glitch, Light Leak, Particle Assembly
 **Dynamic & High-Energy:** Kinetic Type (with your own keywords), Shockwave, 3D Flip
 **Organic & Texture:** Smoke & Ink, Hologram
