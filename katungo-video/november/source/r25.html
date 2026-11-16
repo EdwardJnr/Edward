@@ -1,0 +1,87 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="base.css">
+<style>
+.mock{position:absolute;inset:0;overflow:hidden}
+.cap{font-size:34px;letter-spacing:.28em;text-transform:uppercase;font-weight:600;color:#0F4C3A}
+</style></head><body>
+<div id="paper" class="abs" style="inset:0;background:#F6F7F2"></div>
+<svg id="grid" class="abs" style="left:0;top:0" width="1080" height="1920"></svg>
+<div id="hook" class="abs" style="left:100px;right:80px;top:220px">
+  <div id="lab" class="label" style="margin-bottom:30px">Graphic Design &amp; Branding</div>
+  <div class="mid" data-words>Every identity starts<br>as a <span class="grad">pencil line.</span></div>
+</div>
+<svg id="draw" class="abs" style="left:0;top:0" width="1080" height="1920"></svg>
+<img id="icon" src="logo_icon.png" class="abs" style="left:280px;top:640px;width:520px;height:520px">
+<div id="step" class="abs center cap" style="top:1300px"></div>
+<!-- applications -->
+<div id="m0" class="mock" style="background:#E9EFEC">
+  <div class="abs" style="left:170px;top:600px;width:740px;height:430px;background:#0F4C3A;border-radius:24px;transform:rotate(-8deg);box-shadow:0 40px 80px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center"><img src="logo_full.png" style="width:600px"></div>
+  <div class="abs" style="left:230px;top:1020px;width:700px;height:410px;background:#fff;border-radius:24px;transform:rotate(5deg);box-shadow:0 30px 70px rgba(0,0,0,.15);padding:60px"><div style="font-weight:700;font-size:44px;color:#0F4C3A">Edward</div><div style="font-size:30px;color:#4F6A61;margin-top:8px">Founder · Harare</div><div style="position:absolute;right:50px;bottom:50px;width:90px;height:90px;border-radius:20px;background:#0F4C3A;overflow:hidden"><img src="logo_icon.png" style="width:90px"></div></div>
+</div>
+<div id="m1" class="mock" style="background:#0F4C3A">
+  <div class="abs" style="left:260px;top:330px;width:560px;height:1140px;border-radius:80px;background:#0B1915;padding:24px;box-shadow:0 50px 100px rgba(0,0,0,.4)">
+    <div style="width:100%;height:100%;border-radius:58px;background:#F4F7F5;overflow:hidden">
+      <div style="height:330px;background:#0F4C3A;display:flex;align-items:center;justify-content:center"><img src="logo_full.png" style="width:440px"></div>
+      <div style="padding:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+        <div style="aspect-ratio:1;background:#2FD79A;border-radius:14px"></div><div style="aspect-ratio:1;background:#0F4C3A;border-radius:14px"></div><div style="aspect-ratio:1;background:#BFEFDC;border-radius:14px"></div>
+        <div style="aspect-ratio:1;background:#0F4C3A;border-radius:14px"></div><div style="aspect-ratio:1;background:#BFEFDC;border-radius:14px"></div><div style="aspect-ratio:1;background:#2FD79A;border-radius:14px"></div>
+        <div style="aspect-ratio:1;background:#BFEFDC;border-radius:14px"></div><div style="aspect-ratio:1;background:#2FD79A;border-radius:14px"></div><div style="aspect-ratio:1;background:#0F4C3A;border-radius:14px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="m2" class="mock" style="background:#D9E4DF">
+  <div class="abs" style="left:0;right:0;top:460px;height:1000px;background:#C9D6D0"></div>
+  <div class="abs" style="left:90px;right:90px;top:520px;height:300px;background:#0F4C3A;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 30px 60px rgba(0,0,0,.25)"><img src="logo_full.png" style="width:760px"></div>
+  <div class="abs" style="left:150px;top:880px;width:360px;height:580px;background:#24443A;border-radius:6px"></div>
+  <div class="abs" style="left:570px;top:880px;width:360px;height:440px;background:#A9C4B9;border-radius:6px;border:14px solid #24443A"></div>
+</div>
+<div id="m3" class="mock" style="background:#F1EEE6">
+  <svg class="abs" style="left:190px;top:520px" width="700" height="900" viewBox="0 0 700 900">
+    <polygon points="350,40 680,190 350,340 20,190" fill="#2FD79A"/><polygon points="20,190 350,340 350,860 20,710" fill="#0F4C3A"/><polygon points="680,190 350,340 350,860 680,710" fill="#0C3E30"/>
+  </svg>
+  <img src="logo_icon.png" class="abs" style="left:250px;top:930px;width:200px;transform:skewY(25deg)">
+</div>
+<div id="m4" class="mock" style="background:#E9EFEC">
+  <svg class="abs" style="left:240px;top:420px" width="600" height="1100" viewBox="0 0 600 1100"><path d="M170 300 C170 120 430 120 430 300" stroke="#0F4C3A" stroke-width="26" fill="none"/><rect x="40" y="290" width="520" height="700" rx="20" fill="#0F4C3A"/></svg>
+  <img src="logo_icon.png" class="abs" style="left:420px;top:880px;width:240px">
+</div>
+<div id="fin" class="abs" style="left:100px;right:80px;top:1530px">
+  <div class="mid" style="font-size:84px" data-words>First sketch →<br><span class="grad">print-ready.</span></div>
+</div>
+<script>
+// icon strokes in tile coords (0..442), drawn at 520px from (280,640)
+const S=520/442,X=x=>280+x*S,Y=y=>640+y*S;
+const L=[[221,110,221,332],[23,124,202,209],[23,317,202,234],[419,124,240,209],[419,317,240,234]];
+const jit=(i,k)=>Math.sin(i*12.9898+k*78.233)*6;
+window.REEL={D:18,E:15.8,scene(t){
+  const appOn=t>=9.9;
+  show('paper',1-seg(t,7.6,8.4));
+  // grid + construction
+  let g='';const gp=eo(seg(t,3.0,4.2))*(1-seg(t,7.6,8.2));
+  if(gp>0){for(let i=0;i<=10;i++){g+=`<line x1="${X(i*44.2)}" y1="${Y(0)}" x2="${X(i*44.2)}" y2="${Y(442)}" stroke="#0F4C3A" stroke-opacity="${.12*gp}" stroke-width="2"/><line x1="${X(0)}" y1="${Y(i*44.2)}" x2="${X(442)}" y2="${Y(i*44.2)}" stroke="#0F4C3A" stroke-opacity="${.12*gp}" stroke-width="2"/>`}
+    const cp=eio(seg(t,3.6,5.0));g+=`<circle cx="${X(221)}" cy="${Y(221)}" r="${200*S*cp}" fill="none" stroke="#2FD79A" stroke-opacity="${.7*gp}" stroke-width="3" stroke-dasharray="10 10"/><circle cx="${X(221)}" cy="${Y(221)}" r="${110*S*cp}" fill="none" stroke="#2FD79A" stroke-opacity="${.7*gp}" stroke-width="3" stroke-dasharray="10 10"/>`;
+    g+=`<rect x="${X(0)}" y="${Y(0)}" width="${442*S}" height="${442*S}" rx="${70*S}" fill="none" stroke="#0F4C3A" stroke-opacity="${.5*gp*eio(seg(t,4.4,5.4))}" stroke-width="4"/>`;}
+  $('grid').innerHTML=g;
+  // pencil sketch -> clean vector strokes
+  let d='';const clean=eio(seg(t,5.0,6.8)),sk=1-seg(t,5.6,7.0);
+  L.forEach((l,i)=>{const p=eio(seg(t,0.6+i*0.45,1.2+i*0.45));if(p<=0)return;const x2=l[0]+(l[2]-l[0])*p,y2=l[1]+(l[3]-l[1])*p;
+    if(sk>0)for(let k=0;k<2;k++)d+=`<line x1="${X(l[0])+jit(i,k)}" y1="${Y(l[1])+jit(i,k+3)}" x2="${X(x2)+jit(i,k+5)}" y2="${Y(y2)+jit(i,k+7)}" stroke="#3A3F3C" stroke-opacity="${.55*sk}" stroke-width="${4-k*1.5}" stroke-linecap="round"/>`;
+    if(clean>0)d+=`<line x1="${X(l[0])}" y1="${Y(l[1])}" x2="${X(l[2])}" y2="${Y(l[3])}" stroke="${t>7.9?'#52C09A':'#0F4C3A'}" stroke-opacity="${clean*(1-seg(t,7.9,8.3))}" stroke-width="${38*S*clean}" stroke-linecap="butt"/>`;});
+  // pencil tip
+  const pi=Math.min(4,Math.floor(seg(t,0.6,3.0)*5)),pp=eio(seg(t,0.6+pi*0.45,1.2+pi*0.45)),l=L[pi];
+  if(t>0.5&&t<3.3){const px=X(l[0]+(l[2]-l[0])*pp),py=Y(l[1]+(l[3]-l[1])*pp);d+=`<g transform="translate(${px} ${py}) rotate(35)"><polygon points="0,0 -14,-40 14,-40" fill="#E9C46A"/><polygon points="0,0 -5,-14 5,-14" fill="#333"/><rect x="-14" y="-260" width="28" height="220" fill="#0F4C3A"/><rect x="-14" y="-280" width="28" height="22" fill="#2FD79A"/></g>`}
+  $('draw').innerHTML=d;show('draw',appOn?0:1);
+  // colour flood: real icon
+  const fl=eo5(seg(t,7.9,8.4));show('icon',t>7.85&&!appOn?1:0);$('icon').style.transform=`scale(${0.9+0.1*back(seg(t,7.9,8.5))})`;$('icon').style.opacity=fl;
+  // hook text and step labels
+  show('hook',t<3.2?1:0);wordsIn('#hook',t,0.1,0.07,0.5,2.85);fadeUp('lab',t,0,0.4,2.8);
+  const st=$('step');const steps=[[3.1,5.0,'Construction'],[5.0,7.85,'Sketch → vector'],[7.85,9.9,'Colour']];let txt='',o=0;
+  steps.forEach(s=>{if(t>=s[0]&&t<s[1]){txt=s[2];o=seg(t,s[0],s[0]+0.25)*(1-seg(t,s[1]-0.2,s[1]))}});st.textContent=txt;st.style.opacity=o;
+  // applications: 5 cuts from 9.9 to 15.5
+  const cuts=[9.9,11.0,12.0,13.0,14.1,15.6];
+  for(let i=0;i<5;i++){const m=$('m'+i);const on=t>=cuts[i]&&t<cuts[i+1];show(m,on?1:0);if(on){const u=t-cuts[i];m.style.transform=`scale(${1.08-0.08*eo(seg(u,0,1.2))})`}}
+  show('fin',t>13.0?1:0);wordsIn('#fin',t,13.2,0.08,0.5,15.4);
+}};
+</script>
+<script src="base.js"></script>
+</body></html>

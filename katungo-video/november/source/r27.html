@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="base.css">
+<style>
+#phone{position:absolute;left:300px;top:700px;width:480px;height:960px;border-radius:72px;background:#0B1915;padding:20px;box-shadow:0 50px 100px rgba(11,46,36,.35);transform-origin:50% 0}
+#screen{width:100%;height:100%;border-radius:54px;background:linear-gradient(170deg,#163A2E,#0F4C3A);overflow:hidden;position:relative}
+#clock{position:absolute;left:0;right:0;top:70px;text-align:center;color:#fff;font-weight:300;font-size:120px;letter-spacing:-.03em}
+#date{position:absolute;left:0;right:0;top:56px;text-align:center;color:rgba(255,255,255,.7);font-size:24px;letter-spacing:.06em}
+.nt{position:absolute;left:18px;right:18px;height:104px;border-radius:24px;background:rgba(255,255,255,.94);padding:16px 18px 0 86px;font-size:22px;color:#10261F}
+.nt b{display:block;font-size:19px;color:#4F6A61;font-weight:600;margin-bottom:4px}
+.nt i{position:absolute;left:18px;top:22px;width:52px;height:52px;border-radius:14px;font-style:normal;color:#fff;font-weight:700;font-size:26px;display:flex;align-items:center;justify-content:center}
+.stamp{position:absolute;right:16px;top:30px;border:3px solid #B4473A;color:#B4473A;font-weight:800;font-size:20px;letter-spacing:.12em;padding:4px 10px;border-radius:8px;transform:rotate(-8deg);opacity:0}
+.node{position:absolute;width:190px;text-align:center}
+.node .c{width:120px;height:120px;border-radius:50%;margin:0 auto;background:#fff;border:3px solid rgba(15,76,58,.2);display:flex;align-items:center;justify-content:center;font-size:44px;color:#0F4C3A;font-weight:800}
+.node .l{margin-top:18px;font-weight:700;font-size:32px;color:#0F4C3A}
+</style></head><body>
+<div id="h1" class="abs" style="left:100px;right:80px;top:200px">
+  <div id="lab" class="label" style="margin-bottom:28px">Black Friday · 27 November</div>
+  <div class="mid" data-words>Black Friday brings<br>the messages.</div>
+  <div class="mid" style="margin-top:14px" data-words>Who answers them<br>at <span class="grad">11pm?</span></div>
+</div>
+<div id="h2" class="abs" style="left:100px;right:80px;top:250px"><div class="mid" data-words>Unanswered<br>by <span class="grad">morning.</span></div></div>
+<div id="h3" class="abs" style="left:100px;right:80px;top:160px"><div class="label" style="margin-bottom:24px">Stage 04 · Build the system</div><div class="mid" style="font-size:80px" data-words>The system answers<br><span class="grad">every one.</span></div></div>
+<div id="phone"><div id="screen"><div id="date">FRIDAY 27 NOVEMBER</div><div id="clock">23:04</div><div id="nts"></div></div></div>
+<svg id="pipe" class="abs" style="left:0;top:0" width="1080" height="1920"></svg>
+<div id="nodes"></div>
+<div id="count" class="abs center" style="top:1620px"><span class="label" style="color:#4F6A61">Leads tracked</span><div id="cn" style="font-weight:800;font-size:110px;color:#0F4C3A;letter-spacing:-.04em;font-variant-numeric:tabular-nums">0</div></div>
+<div id="h4" class="abs" style="left:100px;right:80px;top:720px"><div class="big" data-words>Every lead,<br>tracked to<br>a <span class="grad">sale.</span></div></div>
+<script>
+const N=[['WhatsApp','Is this still available?','#1F8A5B','W'],['Instagram','How much for two?','#8A4FBF','I'],['Missed call','+263 77 ··· ····','#B4473A','✆'],['WhatsApp','Do you deliver to Borrowdale?','#1F8A5B','W'],['Instagram','Are you still open?','#8A4FBF','I'],['WhatsApp','Can I pay on collection?','#1F8A5B','W']];
+const MISSED=[0,2,3,5];
+const NODES=[['Replied','↩'],['Tagged','#'],['Lead','★'],['Sale','✓']];const NX=[60,300,540,780],NY=1180;
+window.REEL={D:18,E:15.8,scene(t){
+  if(!window._init){window._init=1;$('nts').innerHTML=N.map((n,i)=>`<div class="nt" id="n${i}"><i style="background:${n[2]}">${n[3]}</i><b>${n[0]}</b>${n[1]}<div class="stamp" id="s${i}">MISSED</div></div>`).join('');$('nodes').innerHTML=NODES.map((n,i)=>`<div class="node" id="nd${i}" style="left:${NX[i]+25}px;top:${NY}px"><div class="c">${n[1]}</div><div class="l">${n[0]}</div></div>`).join('');}
+  show('h1',t<4.9?1:0);wordsIn('#h1',t,0.1,0.06,0.5,4.6);fadeUp('lab',t,0,0.4,4.5);
+  show('h2',t>4.8&&t<7.1?1:0);wordsIn('#h2',t,5.0,0.08,0.5,6.8);
+  show('h3',t>7.0&&t<13.0?1:0);wordsIn('#h3',t,7.4,0.06,0.5,12.7);
+  // phone: enters, then shrinks up for system phase
+  const pin=eo5(seg(t,0.4,1.1)),sh=eio(seg(t,7.0,7.8)),pout=seg(t,12.8,13.1);
+  show('phone',pin>0&&t<13.1?1:0);$('phone').style.opacity=pin*(1-pout);
+  $('phone').style.transform=`translateY(${(1-pin)*300+sh*(-230)}px) scale(${1-0.42*sh})`;
+  $('clock').textContent=t<3.5?'23:04':t<5?'23:17':'23:48';
+  N.forEach((n,i)=>{const s=1.6+i*0.55,p=back(seg(t,s,s+0.35));const el=$('n'+i);
+    const order=N.length-1-i;// newest on top
+    const vis=t>=s;el.style.opacity=vis?Math.min(1,seg(t,s,s+0.15)):0;
+    const stackIdx=N.filter((_,j)=>t>=1.6+j*0.55&&j>i).length;
+    el.style.top=(250+stackIdx*116)+'px';el.style.transform=`scale(${vis?p:0.8})`;
+    const m=MISSED.includes(i),mp=seg(t,5.2+MISSED.indexOf(i)*0.3,5.5+MISSED.indexOf(i)*0.3);
+    if(m){el.style.filter=`grayscale(${mp}) brightness(${1-0.25*mp})`;const st=$('s'+i);st.style.opacity=mp;st.style.transform=`rotate(-8deg) scale(${1.6-0.6*eo(mp)})`;}
+    // system phase: all turn answered
+    if(t>7.8){el.style.filter='none';$('s'+i).style.opacity=0;}
+  });
+  // pipeline
+  let h='';const pp=seg(t,7.6,8.0)*(1-seg(t,12.8,13.1));
+  if(pp>0){h+=`<line x1="${NX[0]+120}" y1="${NY+60}" x2="${NX[3]+120}" y2="${NY+60}" stroke="#0F4C3A" stroke-opacity="${.25*pp}" stroke-width="6" stroke-dasharray="2 16" stroke-linecap="round"/>`;
+    // chips travelling: 9 tokens, staggered
+    for(let k=0;k<9;k++){const s=8.1+k*0.45,u=seg(t,s,s+1.6);if(u<=0||u>=1)continue;
+      let x,y;if(u<0.25){const v=eio(u/0.25);x=540+(NX[0]+120-540)*v;y=900+(NY+60-900)*v}else{const v=eio((u-0.25)/0.75);x=NX[0]+120+(NX[3]-NX[0])*v;y=NY+60}
+      h+=`<circle cx="${x}" cy="${y}" r="22" fill="#2FD79A"/><circle cx="${x}" cy="${y}" r="40" fill="#2FD79A" fill-opacity=".22"/>`;}}
+  $('pipe').innerHTML=h;
+  NODES.forEach((n,i)=>{const el=$('nd'+i);const p=back(seg(t,7.7+i*0.15,8.1+i*0.15));el.style.opacity=seg(t,7.7+i*0.15,7.9+i*0.15)*(1-seg(t,12.8,13.1));el.style.transform=`scale(${p})`;
+    const lit=i==3&&t>9.5;el.querySelector('.c').style.background=lit?'#2FD79A':'#fff';el.querySelector('.c').style.borderColor=lit?'#2FD79A':'rgba(15,76,58,.2)';});
+  const cnt=Math.round(27*eio(seg(t,8.6,12.4)));$('cn').textContent=cnt;show('count',t>8.2&&t<13.1?seg(t,8.2,8.5)*(1-seg(t,12.8,13.1)):0);
+  show('h4',t>13.0?1:0);wordsIn('#h4',t,13.15,0.08,0.5,15.4);
+}};
+</script>
+<script src="base.js"></script>
+</body></html>

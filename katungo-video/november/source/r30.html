@@ -1,0 +1,67 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="base.css">
+<style>
+.no{font-weight:800;font-size:170px;letter-spacing:-.055em;line-height:1.05;color:#0F4C3A}
+#list{position:absolute;left:110px;right:110px;top:560px;background:#fff;border-radius:36px;padding:56px 60px;box-shadow:0 24px 70px rgba(15,76,58,.12)}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:52px;font-weight:600;color:#10261F;padding:22px 0;border-bottom:2px solid #E3ECE8;position:relative}
+.row:last-child{border-bottom:0}
+.row .x{width:0;height:6px;background:#0F4C3A;position:absolute;left:0;top:50%}
+.row span.v{color:#9DB6AC;font-variant-numeric:tabular-nums}
+#frame{position:absolute;left:150px;top:560px;width:780px;height:1000px;border-radius:40px;overflow:hidden;background:#E9EFEC;box-shadow:0 40px 90px rgba(11,46,36,.3)}
+.step{font-size:30px;letter-spacing:.26em;text-transform:uppercase;font-weight:600;color:#0F4C3A}
+</style></head><body>
+<div id="s1" class="abs" style="left:100px;top:520px">
+  <div class="no l1">No studio.</div><div class="no l1">No crew.</div><div class="no l1 grad" style="padding-right:.1em">No models.</div>
+</div>
+<div id="lab0" class="abs label" style="left:100px;top:380px">Intelligent Advisory</div>
+<div id="s2h" class="abs" style="left:110px;top:400px"><div class="label">A traditional shoot</div></div>
+<div id="list">
+  <div class="row"><span>Studio hire</span><span class="v">$ ····</span><div class="x"></div></div>
+  <div class="row"><span>Crew</span><span class="v">$ ····</span><div class="x"></div></div>
+  <div class="row"><span>Models</span><span class="v">$ ····</span><div class="x"></div></div>
+  <div class="row"><span>Location</span><span class="v">$ ····</span><div class="x"></div></div>
+  <div class="row"><span>Equipment hire</span><span class="v">$ ····</span><div class="x"></div></div>
+</div>
+<div id="s3h" class="abs" style="left:100px;right:80px;top:250px"><div class="mid" style="font-size:80px" data-words>AI-built commercial<br><span class="grad">production.</span></div></div>
+<div id="frame"><svg id="art" width="780" height="1000" viewBox="0 0 780 1000"></svg></div>
+<div id="step" class="abs center step" style="top:1610px"></div>
+<div id="chip" class="abs center" style="top:1600px"><div class="pill" style="font-size:40px;padding:20px 36px;background:#0F4C3A;color:#fff">AI-built · no studio required</div></div>
+<div id="s4" class="abs" style="left:100px;right:80px;top:640px">
+  <div class="big" data-words>Plan January<br>now.</div>
+  <div id="cta" style="margin-top:70px"><div class="pill" style="background:#2FD79A;color:#0B2E24">Book a Clarity Sprint →</div></div>
+</div>
+<script>
+window.REEL={D:20,E:18,scene(t){
+  // S1
+  show('s1',t<3.2?1:0);show('lab0',t<3.2?1:0);fadeUp('lab0',t,0,0.4,2.8);
+  $$('.l1').forEach((l,i)=>{const s=0.15+i*0.8,p=eo5(seg(t,s,s+0.45)),q=seg(t,2.8+i*0.05,3.1+i*0.05);l.style.opacity=p*(1-q);l.style.transform=`translateY(${(1-p)*80-q*60}px)`});
+  // S2 list
+  const lin=eo5(seg(t,3.1,3.6)),lout=seg(t,7.8,8.1);show('list',t>3.0&&t<8.1?1:0);$('list').style.opacity=lin*(1-lout);$('list').style.transform=`translateY(${(1-lin)*60-lout*40}px)`;
+  show('s2h',t>3.0&&t<8.1?1:0);fadeUp('s2h',t,3.1,3.4,7.8);
+  $$('.row').forEach((r,i)=>{const p=eio(seg(t,4.1+i*0.65,4.45+i*0.65));r.querySelector('.x').style.width=(p*100)+'%';r.style.opacity=1-0.5*p});
+  // S3 AI build
+  show('s3h',t>7.9&&t<15.1?1:0);wordsIn('#s3h',t,8.1,0.07,0.5,14.8);
+  const fin=eo5(seg(t,8.0,8.5)),fout=seg(t,14.8,15.1);show('frame',t>7.95&&t<15.1?1:0);$('frame').style.opacity=fin*(1-fout);$('frame').style.transform=`scale(${0.94+0.06*fin})`;
+  const bg=eio(seg(t,8.3,9.3)),lt=eo(seg(t,9.7,10.7)),pr=back(seg(t,11.1,11.8)),fx=eo(seg(t,12.5,13.4));
+  let a='<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F4C3A"/><stop offset="1" stop-color="#1F8A64"/></linearGradient><radialGradient id="sp" cx=".5" cy=".38" r=".55"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="bt" x1="0" x2="1"><stop offset="0" stop-color="#0B3A2C"/><stop offset=".45" stop-color="#2FD79A"/><stop offset="1" stop-color="#0B3A2C"/></linearGradient></defs>';
+  a+=`<rect width="780" height="${1000*bg}" fill="url(#g)"/>`;
+  if(bg>=1)a+=`<ellipse cx="390" cy="840" rx="${380}" ry="80" fill="#0B2E24" fill-opacity=".35"/>`;
+  if(lt>0)a+=`<rect width="780" height="1000" fill="url(#sp)" opacity="${lt}"/><polygon points="300,0 480,0 620,1000 160,1000" fill="#fff" fill-opacity="${.07*lt}"/>`;
+  if(pr>0){const y=(1-eo(seg(t,11.1,11.8)))*120;a+=`<g transform="translate(390 ${560+y}) scale(${pr})">
+    <ellipse cx="0" cy="250" rx="${150}" ry="22" fill="#000" fill-opacity="${.35*fx+.15}"/>
+    <rect x="-120" y="-150" width="240" height="400" rx="60" fill="url(#bt)"/>
+    <rect x="-46" y="-250" width="92" height="110" rx="16" fill="#0B3A2C"/><rect x="-56" y="-300" width="112" height="60" rx="14" fill="#F4F7F5"/>
+    <rect x="-100" y="-20" width="200" height="150" rx="14" fill="#F4F7F5"/>
+    <text x="0" y="40" text-anchor="middle" font-family="Inter Tight" font-weight="800" font-size="30" fill="#0F4C3A">YOUR</text><text x="0" y="80" text-anchor="middle" font-family="Inter Tight" font-weight="800" font-size="30" fill="#0F4C3A">PRODUCT</text>
+    <rect x="-100" y="-140" width="26" height="370" rx="13" fill="#fff" fill-opacity="${.35*fx}"/></g>`;}
+  if(fx>0){for(let i=0;i<22;i++){const px=(i*137)%760+10,py=(1000-((i*263+t*90*(1+i%3))%1000));a+=`<circle cx="${px}" cy="${py}" r="${2+i%4}" fill="#fff" fill-opacity="${.5*fx}"/>`}
+    a+=`<rect width="780" height="1000" fill="none" stroke="#2FD79A" stroke-width="${10*fx}" rx="40"/>`;}
+  $('art').innerHTML=a;
+  const steps=[[8.2,9.6,'01 · Background'],[9.6,11.0,'02 · Light'],[11.0,12.4,'03 · Product'],[12.4,13.6,'04 · Final frame']];let txt='',o=0;
+  steps.forEach(s=>{if(t>=s[0]&&t<s[1]){txt=s[2];o=seg(t,s[0],s[0]+.2)*(1-seg(t,s[1]-.15,s[1]))}});$('step').textContent=txt;$('step').style.opacity=o;
+  show('chip',t>13.5&&t<15.1?1:0);$('chip').style.transform=`scale(${back(seg(t,13.6,14.0))})`;$('chip').style.opacity=1-fout;
+  // S4
+  show('s4',t>15.0?1:0);wordsIn('#s4',t,15.2,0.09,0.5,17.6);$('cta').style.transform=`scale(${back(seg(t,15.9,16.35))})`;$('cta').style.opacity=seg(t,15.9,16.0)*(1-seg(t,17.6,17.8));
+}};
+</script>
+<script src="base.js"></script>
+</body></html>

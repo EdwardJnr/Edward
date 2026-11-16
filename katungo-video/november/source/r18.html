@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="base.css"></head><body>
+<div id="hook" class="abs" style="left:100px;right:80px;top:220px">
+  <div class="label" id="lab1" style="margin-bottom:34px">Stage 01 / 05</div>
+  <div class="big" data-words>Not every<br>customer is a<br><span class="grad">good</span> customer.</div>
+</div>
+<svg id="dots" class="abs" style="left:0;top:0" width="1080" height="1920"></svg>
+<div id="s2t" class="abs" style="left:100px;right:80px;top:1420px">
+  <div class="mid" data-words>A handful of customers<br>carries the <span class="grad">business.</span></div>
+</div>
+<div id="qs" class="abs center" style="top:700px;display:flex;flex-direction:column;align-items:center;gap:44px">
+  <div class="pill q"><svg width="54" height="54"><circle cx="27" cy="27" r="27" fill="#2FD79A"/><path d="M15 28l8 8 16-17" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Who buys again?</div>
+  <div class="pill q"><svg width="54" height="54"><circle cx="27" cy="27" r="27" fill="#2FD79A"/><path d="M15 28l8 8 16-17" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Who pays on time?</div>
+  <div class="pill q"><svg width="54" height="54"><circle cx="27" cy="27" r="27" fill="#2FD79A"/><path d="M15 28l8 8 16-17" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Who refers others?</div>
+</div>
+<div id="qlab" class="abs center label" style="top:580px">Ask three questions</div>
+<div id="s4t" class="abs" style="left:100px;right:80px;top:1250px">
+  <div class="big" data-words>Find them.</div>
+  <div class="mid" style="margin-top:20px" data-words>Then find more<br><span class="grad">like them.</span></div>
+</div>
+<script>
+// 20 dots: 5 cols x 4 rows, with jitter; 4 "right" customers
+const DOTS=[];let rs=7;const rnd=()=>{rs=(rs*9301+49297)%233280;return rs/233280};
+for(let r=0;r<4;r++)for(let c=0;c<5;c++)DOTS.push({x:190+c*175+(rnd()-.5)*70,y:1000+r*150+(rnd()-.5)*60,sel:[3,9,12,18].includes(r*5+c)});
+const SPAWN=[];for(let i=0;i<46;i++)SPAWN.push({x:80+rnd()*920,y:120+rnd()*1050,d:rnd()*0.9,s:0.6+rnd()*0.7});
+window.REEL={D:18,E:15.8,scene(t){
+  // hook
+  show('hook',t<2.6?1:0);wordsIn('#hook',t,0.1,0.07,0.5,2.2);fadeUp('lab1',t,0.0,0.4,2.1);
+  // dots
+  let h='';const gather=eio(seg(t,3.0,4.4)),fadeOthers=seg(t,3.0,3.8),out=seg(t,6.9,7.3);
+  const barP=eo(seg(t,3.8,5.2));
+  DOTS.forEach((d,i)=>{const a=back(seg(t,0.6+i*0.035,0.95+i*0.035));let x=d.x,y=d.y,col='#0F4C3A',op=.35;
+    if(d.sel){const k=DOTS.filter(q=>q.sel).indexOf(d);const tx=230+(k%2)*110,ty=1080+Math.floor(k/2)*110;x+= (tx-x)*gather;y+=(ty-y)*gather;col=gather>0?'#2FD79A':'#0F4C3A';op=gather>0?1:.35;}
+    else{op=.35*(1-0.7*fadeOthers);}
+    h+=`<circle cx="${x}" cy="${y}" r="${(d.sel&&gather>0?38:30)*a}" fill="${col}" fill-opacity="${op*(1-out)}"/>`;});
+  // revenue bar
+  if(t>3.6&&t<7.4){const o=seg(t,3.6,3.9)*(1-out);
+    h+=`<g opacity="${o}"><text x="560" y="980" font-family="Inter Tight" font-weight="600" font-size="34" letter-spacing="6" fill="#0F4C3A">REVENUE</text>
+    <rect x="560" y="1010" width="380" height="300" rx="26" fill="#0F4C3A" fill-opacity=".08"/>
+    <rect x="560" y="${1010+300*(1-0.8*barP)}" width="380" height="${300*0.8*barP}" rx="26" fill="#2FD79A"/>
+    <rect x="560" y="1010" width="380" height="${300*0.2*barP}" rx="26" fill="#0F4C3A" fill-opacity=".25"/></g>`;}
+  // spawn (multiply) in S4
+  const sp=seg(t,12.9,15.5);
+  if(t>12.8)SPAWN.forEach(s=>{const a=back(seg(t,13.0+s.d*1.6,13.4+s.d*1.6));h+=`<circle cx="${s.x}" cy="${s.y}" r="${30*s.s*a}" fill="#2FD79A" fill-opacity="${0.35+0.65*s.s/1.3}"/>`;});
+  $('dots').innerHTML=h;
+  show('s2t',t>2.9&&t<7.5?1:0);wordsIn('#s2t',t,3.1,0.07,0.5,6.9);
+  // questions
+  show('qs',t>7.1&&t<13.1?1:0);show('qlab',t>7.1&&t<13.1?1:0);fadeUp('qlab',t,7.2,7.5,12.6);
+  $$('.q').forEach((q,i)=>{const s=7.4+i*1.6;const p=back(seg(t,s,s+0.45));const o=seg(t,s,s+0.15)*(1-seg(t,12.6+i*0.06,12.9+i*0.06));q.style.opacity=o;q.style.transform=`scale(${p}) translateY(${(1-eo(seg(t,s,s+0.45)))*40}px)`;});
+  show('s4t',t>12.9?1:0);wordsIn('#s4t',t,13.1,0.08,0.5,15.3);
+}};
+</script>
+<script src="base.js"></script>
+</body></html>

@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="base.css">
+<style>
+.card{position:absolute;left:90px;right:90px;background:#fff;border-radius:36px;padding:56px 60px;box-shadow:0 24px 70px rgba(15,76,58,.12)}
+.typed{font-weight:700;font-size:66px;line-height:1.18;letter-spacing:-.02em;color:#0F4C3A;min-height:2.36em}
+.caret{display:inline-block;width:6px;height:.95em;background:#2FD79A;vertical-align:-.12em;margin-left:4px}
+.chip{display:inline-block;font-size:28px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;border-radius:999px;padding:10px 22px;margin-bottom:30px}
+.strike{background:linear-gradient(#0B2E24,#0B2E24) no-repeat 0 58%/0% 7px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hl{background:linear-gradient(rgba(47,215,154,.45),rgba(47,215,154,.45)) no-repeat 0 88%/0% 30%;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.stack div{font-weight:800;font-size:150px;letter-spacing:-.05em;line-height:1.02;color:#0F4C3A}
+</style></head><body>
+<div id="s1" class="abs" style="left:100px;right:80px;top:330px">
+  <div id="lab" class="label" style="margin-bottom:34px">Stage 02 / 05</div>
+  <div class="big" data-words>Why should<br>anyone choose<br><span class="grad">you?</span></div>
+</div>
+<div id="s1b" class="abs" style="left:100px;right:80px;top:1060px"><div class="mid" data-words>You get one<br>sentence.</div></div>
+<div id="c1" class="card" style="top:640px">
+  <div class="chip" style="background:#EEF2F0;color:#4F6A61">Most brands write</div>
+  <div class="typed"><span id="t1" class="strike"></span><span id="k1" class="caret"></span></div>
+</div>
+<div id="c2" class="card" style="top:1120px">
+  <div class="chip" style="background:#2FD79A;color:#0B2E24">Sharper · Example</div>
+  <div class="typed"><span id="t2"></span><span id="k2" class="caret"></span></div>
+</div>
+<div id="s4" class="abs stack" style="left:100px;top:470px">
+  <div class="w4">Promise.</div><div class="w4">Proof.</div><div class="w4">Offer.</div><div class="w4 grad" style="padding-right:.1em">Voice.</div>
+</div>
+<div id="cta" class="abs center" style="top:1420px"><div class="pill">Write yours in the comments ↓</div></div>
+<script>
+const T1='We offer quality service at affordable prices.';
+const T2a='Same-day delivery anywhere in Harare, ',T2b='or it\'s free.';
+const ty=(t,a,b,txt)=>txt.slice(0,Math.round(txt.length*seg(t,a,b)));
+window.REEL={D:16,E:13.8,scene(t){
+  show('s1',t<3.1?1:0);wordsIn('#s1',t,0.1,0.07,0.5,2.75);fadeUp('lab',t,0,0.4,2.7);
+  show('s1b',t>1.2&&t<3.1?1:0);wordsIn('#s1b',t,1.35,0.08,0.5,2.8);
+  // card 1
+  const c1in=eo5(seg(t,3.0,3.5)),out=seg(t,10.8,11.1);
+  show('c1',(t>3.0&&t<11.1?1:0));$('c1').style.opacity=c1in*(1-out)*(t>7.0?1-0.45*seg(t,7.0,7.4):1);
+  $('c1').style.transform=`translateY(${(1-c1in)*60-out*40}px)`;
+  $('t1').textContent=ty(t,3.4,5.6,T1);$('k1').style.opacity=(t<6.0&&Math.floor(t*3)%2==0)||(t>3.4&&t<5.6)?1:0;
+  $('t1').style.backgroundSize=`${eio(seg(t,6.0,6.6))*100}% 7px`;$('t1').style.color=t>6.0?`rgba(15,76,58,${1-0.55*seg(t,6.0,6.6)})`:'#0F4C3A';
+  // card 2
+  const c2in=eo5(seg(t,7.0,7.5));show('c2',t>7.0&&t<11.1?1:0);$('c2').style.opacity=c2in*(1-out);$('c2').style.transform=`translateY(${(1-c2in)*60-out*40}px) scale(${1+0.02*Math.sin(Math.PI*seg(t,9.8,10.4))})`;
+  const a=ty(t,7.4,8.9,T2a),b=t>8.9?ty(t,8.9,9.5,T2b):'';
+  $('t2').innerHTML=a+(b?`<span class="hl" id="hl">${b}</span>`:'');if(b)$('hl').style.backgroundSize=`${eio(seg(t,9.7,10.2))*100}% 30%`;
+  $('k2').style.opacity=t>7.2&&t<10.8&&(t<9.5||Math.floor(t*3)%2==0)?1:0;
+  // stack
+  show('s4',t>10.9?1:0);$$('.w4').forEach((w,i)=>{const s=11.05+i*0.38,p=eo5(seg(t,s,s+0.4));w.style.opacity=p;w.style.transform=`translateX(${(1-p)*-80}px)`;});
+  show('cta',t>12.4?1:0);const cp=back(seg(t,12.5,12.95));$('cta').style.transform=`scale(${cp})`;
+}};
+</script>
+<script src="base.js"></script>
+</body></html>
